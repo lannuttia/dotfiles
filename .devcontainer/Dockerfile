@@ -6,4 +6,4 @@ ARG user=vscode
 RUN useradd ${user} \
     && usermod -aG sudo ${user}
 
-USER=${user}
+USER ${user}
