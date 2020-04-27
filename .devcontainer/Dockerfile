@@ -1,9 +1,8 @@
-ARG version=latest
-FROM ubuntu:${version}
+FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-18.04
 
 ARG user=vscode
 
-RUN useradd ${user} \
+RUN useradd -s /bin/bash ${user} \
     && usermod -aG sudo ${user}
 
 USER ${user}
