@@ -23,10 +23,7 @@ else
   exit 1
 fi
 
-# If Oh My ZSH isn't installed, install it
-if [ -d $HOME/.oh-my-zsh ]; then
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-fi
+zsh -c '[ -z $ZSH ] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
 
 # Create a soft link for all configuration files that are not listed in install-exceptions
 find $basename \
