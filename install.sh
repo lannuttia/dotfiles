@@ -30,4 +30,8 @@ find $basename \
   -mindepth 1 \
   -maxdepth 1 \
   $(while IFS='' read -r pattern || [ -n "$pattern" ]; do echo "-and -not -name $pattern"; done < $basename/install-exceptions) \
-  -exec sh -c "ln -sf {} $HOME/\$(basename {})" \;
+  -exec sh -c "if [ -f {} ]; then
+    ln -sf {} $HOME/\$(basename {})
+  elif [ -d {} ]; then
+    ln -sf {} $HOME
+  fi" \;
