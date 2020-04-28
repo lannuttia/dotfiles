@@ -8,6 +8,9 @@ if [ -f /etc/os-release ]; then
         18.04)
           echo -n dnsutils vim neofetch zsh azure-cli
         ;;
+        20.04)
+          echo -n dnsutils vim neofetch zsh azure-cli
+        ;;
         *)
           >&2 echo "Unsupported version of $NAME: $VERSION_ID"
           exit 1;
