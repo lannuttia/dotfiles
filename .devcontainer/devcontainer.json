@@ -1,4 +1,7 @@
 {
     "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-18.04",
-    "remoteUser": "vscode"
+    "remoteUser": "vscode",
+    "extensions": [
+        "vscodevim.vim"
+    ]
 }
