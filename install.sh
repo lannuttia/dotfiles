@@ -24,7 +24,7 @@ else
 fi
 
 # If Oh My ZSH isn't installed, install it
-if [ -z "$ZSH" ]; then
+if [ -d $HOME/.oh-my-zsh ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
