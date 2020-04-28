@@ -6,7 +6,7 @@ if [ -f /etc/os-release ]; then
     ubuntu)
       case $VERSION_ID in
         18.04)
-          echo -n dnsutils vim zsh azure-cli
+          echo -n dnsutils vim neofetch zsh azure-cli
         ;;
         *)
           >&2 echo "Unsupported version of $NAME: $VERSION_ID"
