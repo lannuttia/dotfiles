@@ -1,0 +1,26 @@
+#!/bin/sh
+set -e
+if [ -f /etc/os-release ]; then
+  . /etc/os-release
+  case $ID in
+    ubuntu)
+      case $VERSION_ID in
+        18.04)
+          echo -n dnsutils vim
+        ;;
+        *)
+          >&2 echo "Unsupported version of $NAME: $VERSION_ID"
+          exit 1;
+        ;;
+      esac
+    ;;
+    *)
+      >&2 echo "Unsupported OS: $NAME"
+      exit 1
+    ;;
+  esac
+else
+  >&2 echo 'Failed to sniff environment'
+  exit 1;
+fi
+echo
