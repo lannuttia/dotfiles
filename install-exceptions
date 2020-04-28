@@ -1,5 +1,6 @@
 .devcontainer
 packages
 install-exceptions
+add-repositories
 .git
 install.sh

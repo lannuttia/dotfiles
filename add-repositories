@@ -1,0 +1,21 @@
+if [ -f /etc/os-release ]; then
+  . /etc/os-release
+  case $ID in
+      ubuntu)
+      echo 'Installing minimal packages to add Azure CLI repository'
+      sudo apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
+      echo 'Adding Microsoft signing key'
+      curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+      echo 'Adding Microsoft Azure CLI repository'
+      echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+      sudo apt update
+    ;;
+    *)
+      >&2 echo "Unsupported OS: $NAME"
+      exit 1
+    ;;
+  esac
+else
+  >&2 echo 'Failed to sniff environment'
+  exit 1
+fi

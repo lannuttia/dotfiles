@@ -5,12 +5,13 @@ set -e
 pwd=$(pwd)
 basename=$(dirname $(readlink -f ./install.sh))
 
+$basename/add-repositories
+
 if [ -f /etc/os-release ]; then
   . /etc/os-release
   case $ID in
     ubuntu)
-      echo 'Preparing ubuntu environment'
-      sudo apt install -y $(./packages)
+      sudo apt install -y $($basename/packages)
     ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
