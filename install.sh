@@ -4,14 +4,15 @@ set -e
 
 pwd=$(pwd)
 basename=$(dirname $(readlink -f ./install.sh))
+cd $basename
 
-$basename/add-repositories
+./add-repositories
 
 if [ -f /etc/os-release ]; then
   . /etc/os-release
   case $ID in
     ubuntu)
-      sudo apt install -y $($basename/packages)
+      sudo apt install -y $(./packages)
     ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
@@ -23,15 +24,9 @@ else
   exit 1
 fi
 
-zsh -c '[ -z $ZSH ] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
+ln -sf $basename/.zshrc $HOME/.zshrc
+ln -sf $basename/.vimrc $HOME/.vimrc
 
-# Create a soft link for all configuration files that are not listed in install-exceptions
-find $basename \
-  -mindepth 1 \
-  -maxdepth 1 \
-  $(while IFS='' read -r pattern || [ -n "$pattern" ]; do echo "-and -not -name $pattern"; done < $basename/install-exceptions) \
-  -exec sh -c "if [ -f {} ]; then
-    ln -sf {} $HOME/\$(basename {})
-  elif [ -d {} ]; then
-    ln -sf {} $HOME
-  fi" \;
+if [ ! -d $HOME/.oh-my-zsh ]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi

@@ -1,7 +1,0 @@
-.devcontainer
-packages
-install-exceptions
-add-repositories
-.git
-.gitignore
-install.sh
