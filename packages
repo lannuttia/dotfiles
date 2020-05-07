@@ -6,10 +6,12 @@ if [ -f /etc/os-release ]; then
     ubuntu)
       case $VERSION_ID in
         18.04)
-          echo -n dnsutils vim neofetch zsh tmux azure-cli
+          echo -n 'dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         20.04)
-          echo -n dnsutils vim neofetch zsh tmux azure-cli
+	  # When https://github.com/Azure/azure-cli/issues/13081 gets resolved,
+          # I can add azure-cli to my 20.04 package list
+          echo -n 'dnsutils vim neofetch zsh tmux'
         ;;
         *)
           >&2 echo "Unsupported version of $NAME: $VERSION_ID"
