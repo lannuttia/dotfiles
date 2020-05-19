@@ -3,7 +3,7 @@ if [ -f /etc/os-release ]; then
   . /etc/os-release
   case $ID in
       ubuntu)
-	  # When https://github.com/Azure/azure-cli/issues/13081 gets resolved,
+	      # When https://github.com/Azure/azure-cli/issues/13081 gets resolved,
           # I can remove this version check
           if [ "$VERSION_ID" != "20.04" ]; then
               echo 'Installing minimal packages to add Azure CLI repository'
@@ -14,11 +14,13 @@ if [ -f /etc/os-release ]; then
               echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
               sudo apt update
           fi
-    ;;
-    *)
-      >&2 echo "Unsupported OS: $NAME"
-      exit 1
-    ;;
+      ;;
+      arch)
+      ;;
+      *)
+          >&2 echo "Unsupported OS: $NAME"
+          exit 1
+      ;;
   esac
 else
   >&2 echo 'Failed to sniff environment'

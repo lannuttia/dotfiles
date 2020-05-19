@@ -19,6 +19,9 @@ if [ -f /etc/os-release ]; then
         ;;
       esac
     ;;
+    arch)
+      echo -n 'bind-tools tmux neofetch zsh'
+    ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
       exit 1

@@ -14,6 +14,9 @@ if [ -f /etc/os-release ]; then
     ubuntu)
       sudo apt install -y $(./packages)
     ;;
+    arch)
+      sudo pacman -S --noconfirm $(./packages)
+    ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
       exit 1
