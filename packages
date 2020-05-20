@@ -19,6 +19,16 @@ if [ -f /etc/os-release ]; then
         ;;
       esac
     ;;
+    debian)
+      case $VERSION_ID in
+        10)
+          echo -n 'dnsutils vim neofetch zsh tmux azure-cli'
+        ;;
+        *)
+          >&2 echo "Unsupported version of $NAME: $VERSION_ID"
+        ;;
+      esac
+    ;;
     arch)
       echo -n 'bind-tools tmux neofetch zsh'
     ;;

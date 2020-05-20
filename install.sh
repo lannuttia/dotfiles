@@ -4,18 +4,17 @@ set -e
 
 pwd=$(pwd)
 basename=$(dirname $(readlink -f ./install.sh))
-cd $basename
 
 ./add-repositories
 
 if [ -f /etc/os-release ]; then
   . /etc/os-release
   case $ID in
-    ubuntu)
-      sudo apt install -y $(./packages)
+    ubuntu|debian)
+      sudo apt install -y $($basename/packages)
     ;;
     arch)
-      sudo pacman -S --noconfirm $(./packages)
+      sudo pacman -S --noconfirm $($basename/packages)
     ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
