@@ -3,17 +3,13 @@ if [ -f /etc/os-release ]; then
   . /etc/os-release
   case $ID in
       ubuntu)
-	      # When https://github.com/Azure/azure-cli/issues/13081 gets resolved,
-        # I can remove this version check
-        if [ "$VERSION_ID" != "20.04" ]; then
-          echo 'Installing minimal packages to add Azure CLI repository'
-          sudo apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
-          echo 'Adding Microsoft signing key'
-          curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
-          echo 'Adding Microsoft Azure CLI repository'
-          echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
-          sudo apt update
-        fi
+        echo 'Installing minimal packages to add Azure CLI repository'
+        sudo apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
+        echo 'Adding Microsoft signing key'
+        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+        echo 'Adding Microsoft Azure CLI repository'
+        echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+        sudo apt update
       ;;
       debian)
         echo 'Installing minimal packages to add Azure CLI repository'
