@@ -30,5 +30,6 @@ if [ ! -d $HOME/.oh-my-zsh ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-ln -sf $basename/.vimrc $HOME/.vimrc
-ln -sf $basename/.zshrc $HOME/.zshrc
+for file in .vimrc .zshrc .tmux.conf; do
+  ln -sf $basename/$file $HOME/$file
+done
