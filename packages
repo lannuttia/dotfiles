@@ -3,13 +3,21 @@ set -e
 if [ -f /etc/os-release ]; then
   . /etc/os-release
   case $ID in
+    kali)
+      case $VERSION_ID in
+        2020.1)
+          
+          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+        ;;
+      esac
+    ;;
     ubuntu)
       case $VERSION_ID in
         18.04)
-          echo -n 'dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         20.04)
-          echo -n 'dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         *)
           >&2 echo "Unsupported version of $NAME: $VERSION_ID"
@@ -20,10 +28,10 @@ if [ -f /etc/os-release ]; then
     debian)
       case $VERSION_ID in
         10)
-          echo -n 'dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         9)
-          echo -n 'dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         *)
           >&2 echo "Unsupported version of $NAME: $VERSION_ID"
@@ -31,7 +39,7 @@ if [ -f /etc/os-release ]; then
       esac
     ;;
     arch)
-      echo -n 'bind-tools tmux neofetch zsh'
+      echo -n 'git openssh bind-tools tmux neofetch zsh'
     ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
