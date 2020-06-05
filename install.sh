@@ -67,8 +67,8 @@ else
   exit 1
 fi
 
-if [ "$skip_chsh" = false ]; do
-  if [ -z "$user_shell" ]; do
+if [ "$skip_chsh" = false ]; then
+  if [ -z "$user_shell" ]; then
     echo 'Select one of these shells to be your default shell'
     grep ^/bin /etc/shells
     read user_shell;
