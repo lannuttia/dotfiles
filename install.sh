@@ -45,7 +45,7 @@ shift $(expr $OPTIND - 1) # remove options from positional parameters
 
 basename=$(dirname $(readlink -f $0))
 
-./add-repositories
+$basename/add-repositories
 
 if [ -f /etc/os-release ]; then
   . /etc/os-release
