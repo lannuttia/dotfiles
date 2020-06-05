@@ -43,8 +43,7 @@ while getopts "hSKs:k:" opt; do
 done
 shift $(expr $OPTIND - 1) # remove options from positional parameters
 
-pwd=$(pwd)
-basename=$(dirname $(readlink -f ./install.sh))
+basename=$(dirname $(readlink -f $0))
 
 ./add-repositories
 
