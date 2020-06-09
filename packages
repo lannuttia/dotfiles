@@ -5,7 +5,7 @@ if [ -f /etc/os-release ]; then
   case $ID in
     kali)
       case $VERSION_ID in
-        2020.1)
+        *)
           echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
       esac
