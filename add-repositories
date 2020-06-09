@@ -3,29 +3,24 @@ if [ -f /etc/os-release ]; then
   . /etc/os-release
   case $ID in
       kali)
-        apt update
         echo 'No additional repositorys will be added for Kali'
         apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
       ;;
       ubuntu)
-        apt update
         echo 'Installing minimal packages to add Azure CLI repository'
         apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
         echo 'Adding Microsoft signing key'
         curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
         echo 'Adding Microsoft Azure CLI repository'
         echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/azure-cli.list
-        apt update
       ;;
       debian)
-        apt update
         echo 'Installing minimal packages to add Azure CLI repository'
         apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
         echo 'Adding Microsoft signing key'
         curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
         echo 'Adding Microsoft Azure CLI repository'
         echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/azure-cli.list
-        apt update
       ;;
       arch)
       ;;

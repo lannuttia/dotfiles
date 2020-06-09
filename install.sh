@@ -54,13 +54,36 @@ done
 shift $(expr $OPTIND - 1) # remove options from positional parameters
 
 basename=$(dirname $(readlink -f $0))
-
-$basename/add-repositories
-
 if [ -f /etc/os-release ]; then
   . /etc/os-release
-  case $ID in
-    ubuntu|debian|kali)
+else
+  >&2 echo 'Failed to sniff environment'
+  exit 1
+fi
+
+if [ $ID_LIKE ]; then
+  os=$ID_LIKE
+else
+  os=$ID
+fi
+
+update() {
+  case $os in
+    debian)
+      apt update
+    ;;
+    arch)
+      pacman -Sy
+    ;;
+    *)
+      >&2 echo "Unsupported Distribution: $os"
+      exit 1
+    ;;
+}
+
+install() {
+  case $os in
+    debian)
       apt install -y $($basename/packages)
     ;;
     arch)
@@ -71,10 +94,13 @@ if [ -f /etc/os-release ]; then
       exit 1
     ;;
   esac
-else
-  >&2 echo 'Failed to sniff environment'
-  exit 1
-fi
+}
+
+
+update
+$basename/add-repositories
+update
+install
 
 if [ "$skip_chsh" = false ]; then
   if [ "$no_interactive" = true ] && [ ! -z "$user_shell" ]; then
