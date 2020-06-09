@@ -25,6 +25,7 @@ jobs:
           - image: kalilinux/kali-rolling
             env:
               DEBIAN_FRONTEND: noninteractive
+          - image: archlinux
     steps:
       - uses: actions/checkout@v2
       - name: Run dev-container-install.sh
