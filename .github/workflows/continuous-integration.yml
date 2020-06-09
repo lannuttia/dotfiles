@@ -1,0 +1,22 @@
+name: Continuous Integration
+
+on: [push]
+
+jobs:
+  install:
+    container:
+      image: ${{ matrix.image }}
+    strategy:
+      matrix:
+        image:
+          - ubuntu:18.04
+          - ubuntu:20.04
+          - debian:9
+          - debian:10
+          - kalilinux/kali-rolling
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run dev-container-install.sh
+    run: |
+      ./dev-container-install.sh
+
