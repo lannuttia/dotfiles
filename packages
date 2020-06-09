@@ -7,17 +7,17 @@ if [ -f /etc/os-release ]; then
       case $VERSION_ID in
         2020.1)
           
-          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
       esac
     ;;
     ubuntu)
       case $VERSION_ID in
         18.04)
-          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         20.04)
-          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         *)
           >&2 echo "Unsupported version of $NAME: $VERSION_ID"
@@ -28,10 +28,10 @@ if [ -f /etc/os-release ]; then
     debian)
       case $VERSION_ID in
         10)
-          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         9)
-          echo -n 'git openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         *)
           >&2 echo "Unsupported version of $NAME: $VERSION_ID"
@@ -39,7 +39,7 @@ if [ -f /etc/os-release ]; then
       esac
     ;;
     arch)
-      echo -n 'git openssh bind-tools tmux neofetch zsh'
+      echo -n 'git python3 python3-pip openssh bind-tools tmux neofetch zsh'
     ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
