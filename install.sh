@@ -79,6 +79,7 @@ update() {
       >&2 echo "Unsupported Distribution: $os"
       exit 1
     ;;
+  esac
 }
 
 install() {
