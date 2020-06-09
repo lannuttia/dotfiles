@@ -61,10 +61,10 @@ if [ -f /etc/os-release ]; then
   . /etc/os-release
   case $ID in
     ubuntu|debian|kali)
-      sudo apt install -y $($basename/packages)
+      apt install -y $($basename/packages)
     ;;
     arch)
-      sudo pacman -S --noconfirm $($basename/packages)
+      pacman -S --noconfirm $($basename/packages)
     ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
