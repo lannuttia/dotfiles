@@ -38,7 +38,7 @@ if [ -f /etc/os-release ]; then
       esac
     ;;
     arch)
-      echo -n 'git python3 python3-pip openssh bind-tools tmux neofetch zsh'
+      echo -n 'git python python-pip openssh bind-tools tmux neofetch zsh'
     ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
