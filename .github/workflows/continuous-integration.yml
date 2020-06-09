@@ -5,17 +5,22 @@ on: [push]
 jobs:
   install:
     runs-on: ubuntu-latest
-    container:
-      image: ${{ matrix.image }}
+    container: ${{ matrix.container }}
     strategy:
       fail-fast: false
       matrix:
-        image:
-          - ubuntu:18.04
-          - ubuntu:20.04
-          - debian:9
-          - debian:10
-          - kalilinux/kali-rolling
+        container:
+          - image: ubuntu:18.04
+            env: &debian-env
+              DEBIAN_FRONTEND=noninteractive
+          - image: ubuntu:20.04
+            env: *debian-env
+          - image: debian:9
+            env: *debian-env
+          - image: debian:10
+            env: *debian-env
+          - image: kalilinux/kali-rolling
+            env: *debian-env
     steps:
       - uses: actions/checkout@v2
       - name: Run dev-container-install.sh
