@@ -2,6 +2,7 @@
 
 set -e
 
+no_interactive=false
 skip_chsh=false
 skip_ssh_keygen=false
 
@@ -14,6 +15,9 @@ usage() {
   echo "\t-s\t--use-shell\t\tUse the specified shell"
   echo "\t-K\t--no-ssh-keygen\t\tSkip Automated SSH key generation"
   echo "\t-k\t--ssh-email\t\tEmail address to use during SSH key generation"
+  echo "\t-n\t--git-user-name\t\tUse the specified git user name"
+  echo "\t-e\t--git-user-email\t\tUse the specified git user email"
+  echo "\t-I\t--no-interactive\t\tSkip all interactive steps"
 }
 
 # Transform long options to short options
@@ -25,19 +29,25 @@ for arg in "$@"; do
     "--user-shell") set -- "$@" "-s" ;;
     "--no-ssh-keygen") set -- "$@" "-K" ;;
     "--ssh-email") set -- "$@" "-k" ;;
+    "--git-user-name") set -- "$@" "-n" ;;
+    "--git-user-email") set -- "$@" "-e" ;;
+    "--no-interactive") set -- "$@" "-I" ;;
     *)        set -- "$@" "$arg" ;;
   esac
 done
 
 # Parse short options
 OPTIND=1
-while getopts "hSKs:k:" opt; do
+while getopts "hSKIs:k:n:e:" opt; do
   case "$opt" in
     "h") usage; exit 0 ;;
     "S") skip_chsh=true ;;
     "s") user_shell=$OPTARG ;;
     "K") skip_ssh_keygen=true ;;
     "k") ssh_email=$OPTARG ;;
+    "n") git_user_name=$OPTARG ;;
+    "e") git_user_email=$OPTARG ;;
+    "I") no_interactive=true ;;
     "?") usage >&2; exit 1 ;;
   esac
 done
@@ -67,32 +77,44 @@ else
 fi
 
 if [ "$skip_chsh" = false ]; then
-  if [ -z "$user_shell" ]; then
-    echo 'Select one of these shells to be your default shell'
-    grep ^/bin /etc/shells
-    read user_shell;
+  if [ "$no_interactive" = true ] && [ ! -z "$user_shell" ]; then
+    if [ -z "$user_shell" ]; then
+      echo 'Select one of these shells to be your default shell'
+      grep ^/bin /etc/shells
+      read user_shell;
+    fi
+    chsh --shell $user_shell $USER
   fi
-  chsh --shell $user_shell $USER
 fi
 
 if [ "$skip_ssh_keygen" = false ] && [ ! -f $HOME/.ssh/id_rsa ] && [ ! -f $HOME/.ssh/id_rsa.pub ]; then
-  if [ -z "$ssh_email" ]; then
-    echo -n 'What is the email address for you SSH key: '
-    read ssh_email
+  if [ "$no_interactive" = true ] && [ ! -z "$ssh_email" ]; then
+    if [ -z "$ssh_email" ]; then
+      echo -n 'What is the email address for you SSH key: '
+      read ssh_email
+    fi
+    ssh-keygen -t rsa -f $HOME/.ssh/id_rsa -b 4096 -C $ssh_email
   fi
-  ssh-keygen -t rsa -f $HOME/.ssh/id_rsa -b 4096 -C $ssh_email
 fi
 
 if [ -z "$(git config user.email)" ]; then
-  echo -n 'What is the email address you want to use for git: '
-  read git_user_email
-  git config --global user.email "$git_user_email"
+  if [ "$no_interactive" = true ] && [ ! -z "$git_user_email" ]; then
+    if [ -z "$git_user_email" ]; then
+      echo -n 'What is the email address you want to use for git: '
+      read git_user_email
+    fi
+    git config --global user.email "$git_user_email"
+  fi
 fi
 
 if [ -z "$(git config user.name)" ]; then
-  echo -n 'What is the name you want to use for git: '
-  read git_user_name
-  git config --global user.name "$git_user_name"
+  if [ "$no_interactive" = true ] && [ ! -z "$git_user_name" ]; then
+    if [ -z "$git_user_name" ]; then
+      echo -n 'What is the name you want to use for git: '
+      read git_user_name
+    fi
+    git config --global user.name "$git_user_name"
+  fi
 fi
 
 if [ ! -d $HOME/.oh-my-zsh ]; then
