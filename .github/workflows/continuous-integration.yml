@@ -8,6 +8,7 @@ jobs:
     container:
       image: ${{ matrix.image }}
     strategy:
+      fail-fast: false
       matrix:
         image:
           - ubuntu:18.04
