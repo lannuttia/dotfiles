@@ -12,19 +12,19 @@ jobs:
         container:
           - image: ubuntu:18.04
             env:
-              DEBIAN_FRONTEND=noninteractive
+              DEBIAN_FRONTEND: noninteractive
           - image: ubuntu:20.04
             env:
-              DEBIAN_FRONTEND=noninteractive
+              DEBIAN_FRONTEND: noninteractive
           - image: debian:9
             env:
-              DEBIAN_FRONTEND=noninteractive
+              DEBIAN_FRONTEND: noninteractive
           - image: debian:10
             env:
-              DEBIAN_FRONTEND=noninteractive
+              DEBIAN_FRONTEND: noninteractive
           - image: kalilinux/kali-rolling
             env:
-              DEBIAN_FRONTEND=noninteractive
+              DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v2
       - name: Run dev-container-install.sh
