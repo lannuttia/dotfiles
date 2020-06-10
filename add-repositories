@@ -11,7 +11,7 @@ if [ -f /etc/os-release ]; then
         echo 'Installing minimal packages to add Azure CLI repository'
         apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
         echo 'Adding Microsoft signing key'
-        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.asc.gpg
         echo 'Adding Microsoft Azure CLI repository'
         echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/azure-cli.list
       ;;
@@ -20,7 +20,7 @@ if [ -f /etc/os-release ]; then
         echo 'Installing minimal packages to add Azure CLI repository'
         apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
         echo 'Adding Microsoft signing key'
-        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.asc.gpg
         echo 'Adding Microsoft Azure CLI repository'
         echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/azure-cli.list
       ;;
