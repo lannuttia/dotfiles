@@ -4,7 +4,7 @@ if [ "$(id -u)" = 0 ]; then
 elif [ ! -z $(command -v sudo) ]; then
   sudo -v
   if [ $? -eq 0 ]; then
-    sudo -H ./install.sh --no-interactive
+    sudo -E ./install.sh --no-interactive
   else
     >&2 echo "Failed to validate sudo"
     exit 1;
