@@ -67,13 +67,34 @@ else
   os=$ID
 fi
 
+run_as_root() {
+  has_ran=false
+
+  if [ "$EUID" = 0 ]; then
+    eval "$@"
+    has_ran=true
+  else 
+    if [ ! -z $(command -v sudo) ]; then
+      sudo -v
+      if [ $? -eq 0 ]; then
+        eval "sudo sh -c '$@'"
+        has_ran=true
+      fi
+  fi
+  
+  # If all else fails, run with su
+  if [ "$has_ran" = false ]; then
+    su -c "$@"
+  fi
+}
+
 update() {
   case $os in
     debian)
-      apt update
+      run_as_root apt update
     ;;
     arch)
-      pacman -Sy
+      run_as_root pacman -Sy
     ;;
     *)
       >&2 echo "Unsupported Distribution: $os"
@@ -85,10 +106,10 @@ update() {
 install() {
   case $os in
     debian)
-      apt install -y $($basename/packages)
+      run_as_root apt install -y $($basename/packages)
     ;;
     arch)
-      pacman -S --noconfirm $($basename/packages)
+      run_as_root pacman -S --noconfirm $($basename/packages)
     ;;
     *)
       >&2 echo "Unsupported OS: $NAME"
