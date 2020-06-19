@@ -68,22 +68,16 @@ else
 fi
 
 run_as_root() {
-  has_ran=false
-
   if [ "$EUID" = 0 ]; then
     eval "$@"
-    has_ran=true
-  else 
-    if [ ! -z $(command -v sudo) ]; then
-      sudo -v
-      if [ $? -eq 0 ]; then
-        eval "sudo sh -c '$@'"
-        has_ran=true
-      fi
-  fi
-  
-  # If all else fails, run with su
-  if [ "$has_ran" = false ]; then
+  elif [ ! -z $(command -v sudo) ]; then
+    sudo -v
+    if [ $? -eq 0 ]; then
+      eval "sudo sh -c '$@'"
+    else
+      su -c "$@"
+    fi
+  else
     su -c "$@"
   fi
 }
