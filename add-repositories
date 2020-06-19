@@ -1,28 +1,29 @@
 #!/bin/sh
+basename=$(dirname $(readlink -f $0))
 if [ -f /etc/os-release ]; then
   . /etc/os-release
   case $ID in
       kali)
         echo 'No additional repositorys will be added for Kali'
-        apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
+        $basename/run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
       ;;
       ubuntu)
         arch=$(dpkg --print-architecture)
         echo 'Installing minimal packages to add Azure CLI repository'
-        apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
+        $basename/run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
         echo 'Adding Microsoft signing key'
-        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | $basename/run_as_root tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
         echo 'Adding Microsoft Azure CLI repository'
-        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/azure-cli.list
+        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | $basename/run_as_root tee /etc/apt/sources.list.d/azure-cli.list
       ;;
       debian)
         arch=$(dpkg --print-architecture)
         echo 'Installing minimal packages to add Azure CLI repository'
-        apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
+        $basename/run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
         echo 'Adding Microsoft signing key'
-        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | $basename/run_as_root tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
         echo 'Adding Microsoft Azure CLI repository'
-        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/azure-cli.list
+        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | $basename/run_as_root tee /etc/apt/sources.list.d/azure-cli.list
       ;;
       arch)
       ;;
