@@ -104,7 +104,7 @@ update
 install
 
 if [ "$skip_chsh" = false ]; then
-  if [ "$no_interactive" = true ] && [ ! -z "$user_shell" ]; then
+  if [ "$no_interactive" = false ] || [ ! -z "$user_shell" ]; then
     if [ -z "$user_shell" ]; then
       echo 'Select one of these shells to be your default shell'
       grep ^/bin /etc/shells
@@ -115,7 +115,7 @@ if [ "$skip_chsh" = false ]; then
 fi
 
 if [ "$skip_ssh_keygen" = false ] && [ ! -f $HOME/.ssh/id_rsa ] && [ ! -f $HOME/.ssh/id_rsa.pub ]; then
-  if [ "$no_interactive" = true ] && [ ! -z "$ssh_email" ]; then
+  if [ "$no_interactive" = false ] || [ ! -z "$ssh_email" ]; then
     if [ -z "$ssh_email" ]; then
       echo -n 'What is the email address for you SSH key: '
       read ssh_email
@@ -125,7 +125,7 @@ if [ "$skip_ssh_keygen" = false ] && [ ! -f $HOME/.ssh/id_rsa ] && [ ! -f $HOME/
 fi
 
 if [ -z "$(git config user.email)" ]; then
-  if [ "$no_interactive" = true ] && [ ! -z "$git_user_email" ]; then
+  if [ "$no_interactive" = false ] || [ ! -z "$git_user_email" ]; then
     if [ -z "$git_user_email" ]; then
       echo -n 'What is the email address you want to use for git: '
       read git_user_email
@@ -135,7 +135,7 @@ if [ -z "$(git config user.email)" ]; then
 fi
 
 if [ -z "$(git config user.name)" ]; then
-  if [ "$no_interactive" = true ] && [ ! -z "$git_user_name" ]; then
+  if [ "$no_interactive" = false ] || [ ! -z "$git_user_name" ]; then
     if [ -z "$git_user_name" ]; then
       echo -n 'What is the name you want to use for git: '
       read git_user_name
