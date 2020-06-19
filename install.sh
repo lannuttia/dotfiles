@@ -95,6 +95,9 @@ install() {
       exit 1
     ;;
   esac
+  if [ ! -z $(command -v az) ]; then
+    az extension add --name azure-devops --name codespaces
+  fi
 }
 
 
