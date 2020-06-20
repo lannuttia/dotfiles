@@ -90,7 +90,7 @@ clone_dotfiles() {
       error "git clone of Anthony Lannutti's Dotfiles repo failed"
       exit 1
     }
-  }
+  fi
 
   echo
 }
