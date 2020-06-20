@@ -81,13 +81,15 @@ clone_dotfiles() {
 		exit 1
 	fi
 
-  git clone -c core.eol=lf -c core.autocrlf=false \
+  if [ ! -d $DOTFILES ]; then
+    git clone -c core.eol=lf \
       -c fsck.zeroPaddedFilemode=ignore \
       -c fetch.fsck.zeroPaddedFilemode=ignore \
       -c receive.fsck.zeroPaddedFilemode=ignore \
-      --depth=2 --branch "$branch" "$remote" "$DOTFILES" || {
-    error "git clone of Anthony Lannutti's Dotfiles repo failed"
-    exit 1
+      --branch "$branch" "$remote" "$DOTFILES" || {
+      error "git clone of Anthony Lannutti's Dotfiles repo failed"
+      exit 1
+    }
   }
 
   echo
