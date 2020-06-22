@@ -10,6 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         container:
+          - image: alpine:3
           - image: ubuntu:18.04
             env:
               DEBIAN_FRONTEND: noninteractive

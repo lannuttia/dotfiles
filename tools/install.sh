@@ -12,10 +12,14 @@ chsh=${chsh:-true}
 ssh_keygen=${ssh_keygen:-true}
 git_config=${git_config:-true}
 
+error() {
+	echo ${RED}"Error: $@"${RESET} >&2
+}
+
 if [ -f /etc/os-release ]; then
   . /etc/os-release
 else
-  >&2 echo 'Failed to sniff environment'
+  error 'Failed to sniff environment'
   exit 1
 fi
 
@@ -42,10 +46,6 @@ run_as_root() {
   else
     su -c "$*"
   fi
-}
-
-error() {
-	echo ${RED}"Error: $@"${RESET} >&2
 }
 
 setup_color() {
@@ -153,11 +153,14 @@ update() {
     debian)
       run_as_root apt update
     ;;
+    alpine)
+      run_as_root apk update
+    ;;
     arch)
       run_as_root pacman -Sy
     ;;
     *)
-      >&2 echo "Unsupported Distribution: $os"
+      error "Unsupported Distribution: $os"
       exit 1
     ;;
   esac
@@ -187,10 +190,14 @@ add_repositories() {
         echo 'Adding Microsoft Azure CLI repository'
         echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | run_as_root tee /etc/apt/sources.list.d/azure-cli.list
       ;;
+      alpine)
+        echo 'No additional repositorys will be added for Alpine'
+        run_as_root apk add ca-certificates curl gnupg
+      ;;
       arch)
       ;;
       *)
-          >&2 echo "Unsupported OS: $NAME"
+          error "Unsupported OS: $NAME"
           exit 1
       ;;
   esac
@@ -214,7 +221,7 @@ packages() {
           echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         *)
-          >&2 echo "Unsupported version of $NAME: $VERSION_ID"
+          error "Unsupported version of $NAME: $VERSION_ID"
           exit 1;
         ;;
       esac
@@ -228,7 +235,17 @@ packages() {
           echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
         ;;
         *)
-          >&2 echo "Unsupported version of $NAME: $VERSION_ID"
+          error "Unsupported version of $NAME: $VERSION_ID"
+        ;;
+      esac
+    ;;
+    alpine)
+      case $VERSION_ID in
+        3\.*)
+          echo -n 'git python3 py3-pip openssh-client bind-tools vim neofetch zsh tmux'
+	;;
+        *)
+          error "Unsupported version of $NAME: $VERSION_ID"
         ;;
       esac
     ;;
@@ -236,7 +253,7 @@ packages() {
       echo -n 'git python python-pip openssh bind-tools tmux neofetch zsh'
     ;;
     *)
-      >&2 echo "Unsupported OS: $NAME"
+      error "Unsupported OS: $NAME"
       exit 1
     ;;
   esac
@@ -250,8 +267,11 @@ install() {
     arch)
       run_as_root pacman -S --noconfirm $(packages)
     ;;
+    alpine)
+      run_as_root apk add $(packages)
+    ;;
     *)
-      >&2 echo "Unsupported OS: $NAME"
+      error "Unsupported OS: $NAME"
       exit 1
     ;;
   esac
