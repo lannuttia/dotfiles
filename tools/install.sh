@@ -11,6 +11,7 @@ branch=${branch:-master}
 chsh=${chsh:-true}
 ssh_keygen=${ssh_keygen:-true}
 git_config=${git_config:-true}
+install_ranger=${install_ranger:-true}
 
 error() {
 	echo ${RED}"Error: $@"${RESET} >&2
@@ -145,6 +146,7 @@ usage() {
   echo "\t--no-chsh\t\tSkip running chsh for user [DEFAULT=$([ "$chsh" = true ] && echo "false" || echo "true")]"
   echo "\t--no-ssh-keygen\t\tSkip automated SSH key generation"
   echo "\t--no-git-config\t\tSkip interactive Git configuration"
+  echo "\t--no-ranger\t\tDo not install the Ranger file explorer"
   echo "\t--no-interactive\t\tSkip all interactive steps"
 }
 
@@ -209,6 +211,9 @@ packages() {
       case $VERSION_ID in
         *)
           echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          if [ "$install_ranger" = true ]; then
+            echo -n ' ranger'
+          fi
         ;;
       esac
     ;;
@@ -216,9 +221,15 @@ packages() {
       case $VERSION_ID in
         18.04)
           echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          if [ "$install_ranger" = true ]; then
+            echo -n ' ranger'
+          fi
         ;;
         20.04)
           echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          if [ "$install_ranger" = true ]; then
+            echo -n ' ranger'
+          fi
         ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -230,9 +241,15 @@ packages() {
       case $VERSION_ID in
         10)
           echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          if [ "$install_ranger" = true ]; then
+            echo -n ' ranger'
+          fi
         ;;
         9)
           echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          if [ "$install_ranger" = true ]; then
+            echo -n ' ranger'
+          fi
         ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -243,14 +260,20 @@ packages() {
       case $VERSION_ID in
         3\.*)
           echo -n 'git python3 py3-pip openssh-client bind-tools vim neofetch zsh tmux'
-	;;
+          if [ "$install_ranger" = true ]; then
+            echo -n ' ranger'
+          fi
+	      ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
         ;;
       esac
     ;;
     arch)
-      echo -n 'git python python-pip openssh bind-tools tmux neofetch zsh'
+      echo -n 'git python python-pip openssh bind-tools vim neofetch zsh tmux'
+      if [ "$install_ranger" = true ]; then
+        echo -n ' ranger'
+      fi
     ;;
     *)
       error "Unsupported OS: $NAME"
@@ -306,6 +329,7 @@ main() {
       --no-chsh) chsh=false ;;
       --no-ssh-keygen) ssh_keygen=false ;;
       --no-git-config) git_config=false ;;
+      --no-ranger) install_ranger=false ;;
       --no-interactive) chsh=false; ssh_keygen=false; git_config=false ;;
       *) usage >&2; exit 1 ;;
     esac
