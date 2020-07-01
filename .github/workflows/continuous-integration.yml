@@ -21,9 +21,9 @@ jobs:
             env:
               DEBIAN_FRONTEND: noninteractive
           - image: debian:10
-          - image: elementary/docker:hera-stable
             env:
               DEBIAN_FRONTEND: noninteractive
+          - image: elementary/docker:hera-stable
             env:
               DEBIAN_FRONTEND: noninteractive
           - image: kalilinux/kali-rolling
