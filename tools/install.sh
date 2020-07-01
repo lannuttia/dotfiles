@@ -183,6 +183,15 @@ add_repositories() {
         echo 'Adding Microsoft Azure CLI repository'
         echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | run_as_root tee /etc/apt/sources.list.d/azure-cli.list
       ;;
+      elementary)
+        arch=$(dpkg --print-architecture)
+        echo 'Installing minimal packages to add Azure CLI repository'
+        run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
+        echo 'Adding Microsoft signing key'
+        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | run_as_root tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+        echo 'Adding Microsoft Azure CLI repository'
+        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${UBUNTU_CODENAME} main" | run_as_root tee /etc/apt/sources.list.d/azure-cli.list
+      ;;
       debian)
         arch=$(dpkg --print-architecture)
         echo 'Installing minimal packages to add Azure CLI repository'
@@ -217,9 +226,9 @@ packages() {
         ;;
       esac
     ;;
-    ubuntu)
+    ubuntu|elementary)
       case $VERSION_ID in
-        18.04)
+        18.04|5.*)
           echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
