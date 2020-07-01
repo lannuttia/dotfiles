@@ -109,7 +109,7 @@ setup_shell() {
   fi
 
   if [ "$chsh" = true ]; then
-    echo "${YELLOW}Select one of these shells to be your default shell"
+    echo "${YELLOW}Select one of these shells to be your default shell${RESET}"
     grep -v '^#' /etc/shells
     read user_shell;
     chsh --shell $user_shell $USER
