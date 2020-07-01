@@ -174,23 +174,14 @@ add_repositories() {
         echo 'No additional repositorys will be added for Kali'
         run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
       ;;
-      ubuntu)
+      ubuntu|elementary)
         arch=$(dpkg --print-architecture)
         echo 'Installing minimal packages to add Azure CLI repository'
         run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
         echo 'Adding Microsoft signing key'
         curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | run_as_root tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
         echo 'Adding Microsoft Azure CLI repository'
-        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | run_as_root tee /etc/apt/sources.list.d/azure-cli.list
-      ;;
-      elementary)
-        arch=$(dpkg --print-architecture)
-        echo 'Installing minimal packages to add Azure CLI repository'
-        run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
-        echo 'Adding Microsoft signing key'
-        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | run_as_root tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
-        echo 'Adding Microsoft Azure CLI repository'
-        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${UBUNTU_CODENAME} main" | run_as_root tee /etc/apt/sources.list.d/azure-cli.list
+        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${UBUNTU_CODENAME:-$VERSION_CODENAME} main" | run_as_root tee /etc/apt/sources.list.d/azure-cli.list
       ;;
       debian)
         arch=$(dpkg --print-architecture)
@@ -293,7 +284,7 @@ packages() {
 
 install() {
   case $os in
-    debian)
+    debian|ubuntu)
       run_as_root apt install -y $(packages)
     ;;
     arch)
