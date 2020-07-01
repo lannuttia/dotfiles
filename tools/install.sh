@@ -152,7 +152,7 @@ usage() {
 
 update() {
   case $os in
-    debian)
+    debian|ubuntu)
       run_as_root apt update
     ;;
     alpine)
