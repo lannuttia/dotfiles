@@ -147,6 +147,7 @@ setup_gpg() {
       gpg --full-generate-key
     else
       error "Could not find the gpg executible"
+    fi
   fi
 }
 
