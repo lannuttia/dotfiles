@@ -266,7 +266,7 @@ packages() {
     alpine)
       case $VERSION_ID in
         3\.*)
-          echo -n 'git gpg python3 py3-pip openssh-client bind-tools vim neofetch zsh tmux'
+          echo -n 'git gnupg python3 py3-pip openssh-client bind-tools vim neofetch zsh tmux'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
