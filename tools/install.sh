@@ -155,12 +155,13 @@ usage() {
   echo "Usage: $0 [OPTIONS]"
   echo
   echo "OPTIONS:"
-  echo "\t--help\t\t\tDisplay this help menu"
-  echo "\t--no-chsh\t\tSkip running chsh for user [DEFAULT=$([ "$chsh" = true ] && echo "false" || echo "true")]"
-  echo "\t--no-ssh-keygen\t\tSkip automated SSH key generation"
-  echo "\t--no-git-config\t\tSkip interactive Git configuration"
-  echo "\t--no-ranger\t\tDo not install the Ranger file explorer"
-  echo "\t--no-interactive\t\tSkip all interactive steps"
+  echo -e "\t--help\t\t\tDisplay this help menu"
+  echo -e "\t--no-chsh\t\tSkip running chsh for user [DEFAULT=$([ "$chsh" = true ] && echo "false" || echo "true")]"
+  echo -e "\t--no-ssh-keygen\t\tSkip automated SSH key generation"
+  echo -e "\t--no-gpg-keygen\t\tSkip interactive GPG key generation"
+  echo -e "\t--no-git-config\t\tSkip interactive Git configuration"
+  echo -e "\t--no-ranger\t\tDo not install the Ranger file explorer"
+  echo -e "\t--no-interactive\t\tSkip all interactive steps"
 }
 
 update() {
