@@ -141,7 +141,12 @@ setup_ssh() {
 
 setup_gpg() {
   if [ "$gpg_keygen" = true ]; then
-    gpg --full-generate-key
+    if command_exists gpg2; then
+      gpg2 --full-generate-key
+    elif command_exists gpg; then
+      gpg --full-generate-key
+    else
+      error "Could not find the gpg executible"
   fi
 }
 
