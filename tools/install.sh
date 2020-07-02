@@ -359,6 +359,7 @@ main() {
   update
   install
   setup_ssh
+  setup_gpg
   setup_shell
   setup_gitconfig
   clone_dotfiles
