@@ -10,6 +10,7 @@ branch=${branch:-master}
 
 chsh=${chsh:-true}
 ssh_keygen=${ssh_keygen:-true}
+gpg_keygen=${gpg_keygen:-true}
 git_config=${git_config:-true}
 install_ranger=${install_ranger:-true}
 
@@ -138,6 +139,12 @@ setup_ssh() {
   fi
 }
 
+setup_gpg() {
+  if [ "$gpg_keygen" = true ]; then
+    gpg --full-generate-key
+  fi
+}
+
 usage() {
   echo "Usage: $0 [OPTIONS]"
   echo
@@ -210,7 +217,7 @@ packages() {
     kali)
       case $VERSION_ID in
         *)
-          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gpg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
@@ -220,13 +227,13 @@ packages() {
     ubuntu|elementary)
       case $VERSION_ID in
         18.04|5.*)
-          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gpg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
         ;;
         20.04)
-          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gpg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
@@ -240,13 +247,13 @@ packages() {
     debian)
       case $VERSION_ID in
         10)
-          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gpg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
         ;;
         9)
-          echo -n 'git python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gpg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
@@ -259,7 +266,7 @@ packages() {
     alpine)
       case $VERSION_ID in
         3\.*)
-          echo -n 'git python3 py3-pip openssh-client bind-tools vim neofetch zsh tmux'
+          echo -n 'git gpg python3 py3-pip openssh-client bind-tools vim neofetch zsh tmux'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
@@ -270,7 +277,7 @@ packages() {
       esac
     ;;
     arch)
-      echo -n 'git python python-pip openssh bind-tools vim neofetch zsh tmux'
+      echo -n 'git gpg python python-pip openssh bind-tools vim neofetch zsh tmux'
       if [ "$install_ranger" = true ]; then
         echo -n ' ranger'
       fi
@@ -319,6 +326,7 @@ main() {
   if [ ! -t 0 ]; then
     chsh=false
     ssh_keygen=false
+    gpg_keygen=false
     git_config=false
   fi
 
@@ -328,9 +336,10 @@ main() {
       --help) usage; exit 0 ;;
       --no-chsh) chsh=false ;;
       --no-ssh-keygen) ssh_keygen=false ;;
+      --no-gpg-keygen) gpg_keygen=false ;;
       --no-git-config) git_config=false ;;
       --no-ranger) install_ranger=false ;;
-      --no-interactive) chsh=false; ssh_keygen=false; git_config=false ;;
+      --no-interactive) chsh=false; ssh_keygen=false; gpg_keygen=false; git_config=false ;;
       *) usage >&2; exit 1 ;;
     esac
     shift
