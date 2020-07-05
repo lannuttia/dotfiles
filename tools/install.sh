@@ -20,7 +20,7 @@ error() {
 
 if [ -f /etc/os-release ] || [ -f /usr/lib/os-release ] || [ -f /etc/openwrt_release ] || [ -f /etc/lsb_release ]; then
    for file in /etc/lsb-release /usr/lib/os-release /etc/os-release /etc/openwrt_release; do
-     [ -f "$file" ] && source "$file" && break
+     [ -f "$file" ] && . "$file" && break
    done
 else
   error 'Failed to sniff environment'
