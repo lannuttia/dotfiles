@@ -18,8 +18,10 @@ error() {
 	echo ${RED}"Error: $@"${RESET} >&2
 }
 
-if [ -f /etc/os-release ]; then
-  . /etc/os-release
+if [ -f /etc/os-release ] || [ -f /usr/lib/os-release ] || [ -f /etc/openwrt_release ] || [ -f /etc/lsb_release ]; then
+   for file in /etc/lsb-release /usr/lib/os-release /etc/os-release /etc/openwrt_release; do
+     [ -f "$file" ] && source "$file" && break
+   done
 else
   error 'Failed to sniff environment'
   exit 1
@@ -140,6 +142,7 @@ setup_ssh() {
 }
 
 setup_gpg() {
+  echo $gpg_keygen
   if [ "$gpg_keygen" = true ]; then
     if command_exists gpg2; then
       gpg2 --full-generate-key
@@ -172,7 +175,7 @@ update() {
     alpine)
       run_as_root apk update
     ;;
-    arch)
+    arch|artix)
       run_as_root pacman -Sy
     ;;
     *)
@@ -210,7 +213,7 @@ add_repositories() {
         echo 'No additional repositorys will be added for Alpine'
         run_as_root apk add ca-certificates curl gnupg
       ;;
-      arch)
+      arch|artix)
       ;;
       *)
           error "Unsupported OS: $NAME"
@@ -283,7 +286,7 @@ packages() {
         ;;
       esac
     ;;
-    arch)
+    arch|artix)
       echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh tmux'
       if [ "$install_ranger" = true ]; then
         echo -n ' ranger'
@@ -301,7 +304,7 @@ install() {
     debian|ubuntu)
       run_as_root apt install -y $(packages)
     ;;
-    arch)
+    arch|artix)
       run_as_root pacman -S --noconfirm $(packages)
     ;;
     alpine)

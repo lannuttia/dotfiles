@@ -11,12 +11,8 @@ jobs:
       matrix:
         container:
           - image: alpine:3
-          - image: ubuntu:18.04
-            env:
-              DEBIAN_FRONTEND: noninteractive
-          - image: ubuntu:20.04
-            env:
-              DEBIAN_FRONTEND: noninteractive
+          - image: archlinux
+          - image: artixlinux/base
           - image: debian:9
             env:
               DEBIAN_FRONTEND: noninteractive
@@ -29,7 +25,12 @@ jobs:
           - image: kalilinux/kali-rolling
             env:
               DEBIAN_FRONTEND: noninteractive
-          - image: archlinux
+          - image: ubuntu:18.04
+            env:
+              DEBIAN_FRONTEND: noninteractive
+          - image: ubuntu:20.04
+            env:
+              DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v2
       - name: Run dev-container-install.sh
