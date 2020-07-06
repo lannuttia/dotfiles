@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Install tar
         if: ${{ matrix.container.image == 'artixlinux/base' }}
-        run: pacman -Sy && pacman -S tar
+        run: pacman -Sy --noconfirm && pacman -S --noconfirm tar
       - uses: actions/checkout@v2
       - name: Run dev-container-install.sh
         run: ./tools/dev-container-install.sh
