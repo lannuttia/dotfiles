@@ -16,7 +16,6 @@ jobs:
         container:
           - image: alpine:3
           - image: archlinux
-          - image: artixlinux/base
           - image: debian:9
             env:
               DEBIAN_FRONTEND: noninteractive
@@ -36,9 +35,6 @@ jobs:
             env:
               DEBIAN_FRONTEND: noninteractive
     steps:
-      - name: Install tar
-        if: ${{ matrix.container.image == 'artixlinux/base' }}
-        run: pacman -Sy --noconfirm && pacman -S --noconfirm tar
       - uses: actions/checkout@v2
       - name: Run dev-container-install.sh
         run: ./tools/dev-container-install.sh
