@@ -32,10 +32,10 @@ jobs:
             env:
               DEBIAN_FRONTEND: noninteractive
     steps:
-      - uses: actions/checkout@v2
       - name: Install tar
         if: ${{ matrix.container.image == 'artixlinux/base' }}
         run: pacman -Sy && pacman -S tar
+      - uses: actions/checkout@v2
       - name: Run dev-container-install.sh
         run: ./tools/dev-container-install.sh
 
