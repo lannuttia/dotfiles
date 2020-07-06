@@ -20,8 +20,7 @@ error() {
 
 if [ -f /etc/os-release ] || [ -f /usr/lib/os-release ] || [ -f /etc/openwrt_release ] || [ -f /etc/lsb_release ]; then
    for file in /etc/os-release /usr/lib/os-release /etc/openwrt_release /etc/lsb_release; do
-     echo "checkingi if $file exists"
-     [ -f "$file" ] && echo "Sourcing $file" && . "$file" && break
+     [ -f "$file" ] && . "$file" && break
    done
 else
   error 'Failed to sniff environment'
@@ -294,9 +293,10 @@ packages() {
       fi
     ;;
     artix)
-      # It doesn't appear that dvtm is in the base Artix repos...
-      echo -n 'git gnupg openssh bind-tools vim neofetch zsh'
-      # Ranger doesn't appear to be there either
+      echo -n 'git gnupg openssh bind-tools vim neofetch zsh dvtm'
+      if [ "$install_ranger" = true ]; then
+        echo -n ' ranger'
+      fi
     ;;
     *)
       error "Unsupported OS: $NAME"
