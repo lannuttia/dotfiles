@@ -295,7 +295,7 @@ packages() {
     ;;
     artix)
       # It doesn't appear that dvtm is in the base Artix repos...
-      echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh'
+      echo -n 'git gnupg openssh bind-tools vim neofetch zsh'
       # Ranger doesn't appear to be there either
     ;;
     *)
