@@ -227,7 +227,7 @@ packages() {
     kali)
       case $VERSION_ID in
         *)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
@@ -237,13 +237,13 @@ packages() {
     ubuntu|elementary)
       case $VERSION_ID in
         18.04|5.*)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
         ;;
         20.04)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
@@ -257,13 +257,13 @@ packages() {
     debian)
       case $VERSION_ID in
         10)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
         ;;
         9)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh tmux azure-cli'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
@@ -276,7 +276,7 @@ packages() {
     alpine)
       case $VERSION_ID in
         3\.*)
-          echo -n 'git gnupg python3 py3-pip openssh-client bind-tools vim neofetch zsh tmux'
+          echo -n 'git gnupg python3 py3-pip openssh-client bind-tools vim neofetch zsh dvtm'
           if [ "$install_ranger" = true ]; then
             echo -n ' ranger'
           fi
@@ -287,7 +287,7 @@ packages() {
       esac
     ;;
     arch|artix)
-      echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh tmux'
+      echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm'
       if [ "$install_ranger" = true ]; then
         echo -n ' ranger'
       fi
@@ -327,7 +327,7 @@ install() {
 }
 
 link_dotfiles() {
-  for file in .vimrc .zshenv .zshrc .tmux.conf; do
+  for file in .vimrc .zshenv .zshrc; do
     ln -sf $DOTFILES/$file $HOME/$file
   done
 }
