@@ -287,11 +287,16 @@ packages() {
         ;;
       esac
     ;;
-    arch|artix)
+    arch)
       echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm'
       if [ "$install_ranger" = true ]; then
         echo -n ' ranger'
       fi
+    ;;
+    artix)
+      # It doesn't appear that dvtm is in the base Artix repos...
+      echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh'
+      # Ranger doesn't appear to be there either
     ;;
     *)
       error "Unsupported OS: $NAME"
