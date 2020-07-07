@@ -232,7 +232,7 @@ packages() {
             # Install tools required to build custom St
             echo -n ' make gcc libx11-dev libxft-dev'
             # Install Window Manager and Utilities
-            echo -n ' sxhkd bspwm x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter'
+            echo -n ' sxhkd bspwm x11-xserver-utils compton polybar gnome-keyring libsecret-1-0 unclutter feh'
             # Install tools for viewing PDFs
             echo -n ' zathura zathura-pdf-poppler'
             # Install MPD and NCMPCPP
@@ -286,7 +286,7 @@ packages() {
         # Install tools required to build custom St
         echo -n ' make gcc'
         # Install Window Manager and Utilities
-        echo -n ' sxhkd bspwm xorg-xrdb picom polybar gnome-keyring libsecret unclutter'
+        echo -n ' sxhkd bspwm xorg-xrdb picom polybar gnome-keyring libsecret unclutter feh'
         # Install tools for viewing PDFs
         echo -n ' zathura zathura-pdf-mupdf'
         # Install MPD and NCMPCPP
