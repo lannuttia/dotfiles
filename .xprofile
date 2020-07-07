@@ -1,0 +1,10 @@
+case $XDG_SESSION_DESKTOP in
+  bspwm|'')
+    pulseaudio --start
+    picom -b
+    unclutter &
+    ;;
+  default)
+    # Do nothing
+    ;;
+esac
