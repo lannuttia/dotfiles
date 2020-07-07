@@ -272,7 +272,7 @@ packages() {
       echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm ranger htop make gcc'
       if [ "$gui" = true ]; then
         # Install Window Manager and Utilities
-        echo -n ' sxhkd bspwm xorg-xrdb picom polybar unclutter'
+        echo -n ' sxhkd bspwm xorg-xrdb picom polybar gnome-keyring libsecret unclutter'
         # Install tools for viewing PDFs
         echo -n ' zathura zathura-pdf-mupdf'
         # Install MPD and NCMPCPP
