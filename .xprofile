@@ -1,7 +1,17 @@
+command_exists() {
+  command -v "$@" >/dev/null 2>&1
+}
+
 case $XDG_SESSION_DESKTOP in
   bspwm|'')
     pulseaudio --start
-    picom -b
+    if command_exists picom; then
+      picom -b
+    elif command_exists compton; then
+      compton -b
+    elif command_exists xcompmgr; then
+      xcompmgr &
+    fi
     unclutter &
     ;;
   default)
