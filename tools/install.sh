@@ -227,17 +227,17 @@ packages() {
     kali)
       case $VERSION_ID in
         *)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop make gcc'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
       esac
     ;;
     ubuntu|elementary)
       case $VERSION_ID in
         18.04|5.*)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop make gcc'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
         20.04)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop make gcc'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -248,10 +248,10 @@ packages() {
     debian)
       case $VERSION_ID in
         10)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop make gcc'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
         9)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop make gcc'
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -261,7 +261,7 @@ packages() {
     alpine)
       case $VERSION_ID in
         3\.*)
-          echo -n 'git gnupg python3 py3-pip openssh-client bind-tools vim neofetch zsh dvtm ranger htop make gcc'
+          echo -n 'git gnupg python3 py3-pip openssh-client bind-tools vim neofetch zsh dvtm ranger htop'
 	      ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -269,8 +269,10 @@ packages() {
       esac;
     ;;
     arch|artix)
-      echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm ranger htop make gcc'
+      echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm ranger htop'
       if [ "$gui" = true ]; then
+        # Install tools required to build custom St
+        echo -n ' make gcc'
         # Install Window Manager and Utilities
         echo -n ' sxhkd bspwm xorg-xrdb picom polybar gnome-keyring libsecret unclutter'
         # Install tools for viewing PDFs
@@ -329,9 +331,11 @@ install_custom_build() {
 }
 
 install_custom_builds() {
-  for src_dir in st; do
-    install_custom_build "${src_dir}"
-  done
+  if [ "$gui" = true ]; then
+    for src_dir in st; do
+      install_custom_build "${src_dir}"
+    done
+  fi
 }
 
 load_xresources() {
