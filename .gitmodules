@@ -1,0 +1,4 @@
+[submodule "src/st"]
+	path = src/st
+	url = https://github.com/lannuttia/st
+	branch = master

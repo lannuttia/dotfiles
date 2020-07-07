@@ -54,7 +54,7 @@ run_as_root() {
 
 setup_color() {
 	# Only use colors if connected to a terminal
-	if [ -t 1 ]; then
+    if [ -t 1 ]; then
 		RED=$(printf '\033[31m')
 		GREEN=$(printf '\033[32m')
 		YELLOW=$(printf '\033[33m')
@@ -322,6 +322,18 @@ link_dotfiles() {
   done
 }
 
+install_custom_build() {
+  run_as_root ln -sf "/usr/local/src/$1" "$DOTFILES/src/$1"
+  make -C "$DOTFILES/src/$1" clean
+  run_as_root make -C "$DOTFILES/src/$1" install
+}
+
+install_custom_builds() {
+  for src_dir in st; do
+    install_custom_build "${src_dir}"
+  done
+}
+
 load_xresources() {
   if [ "$gui" = true ] && command_exists xrdb; then
     xrdb ${HOME}/.Xresources
@@ -357,6 +369,7 @@ main() {
   add_repositories
   update
   install
+  install_custom_builds
   setup_ssh
   setup_gpg
   setup_shell
