@@ -1,2 +1,10 @@
-/.ssh/*
-!/.ssh/config
+/.config/*
+!/.config/bspwm
+!/.config/htop
+!/.config/mpd
+!/.config/ncmpcpp
+!/.config/neofetch
+!/.config/picom
+!/.config/polybar
+!/.config/sxhkd
+

@@ -12,7 +12,7 @@ chsh=${chsh:-true}
 ssh_keygen=${ssh_keygen:-true}
 gpg_keygen=${gpg_keygen:-true}
 git_config=${git_config:-true}
-install_ranger=${install_ranger:-true}
+gui=${gui:-true}
 
 error() {
 	echo ${RED}"Error: $@"${RESET} >&2
@@ -20,8 +20,7 @@ error() {
 
 if [ -f /etc/os-release ] || [ -f /usr/lib/os-release ] || [ -f /etc/openwrt_release ] || [ -f /etc/lsb_release ]; then
    for file in /etc/os-release /usr/lib/os-release /etc/openwrt_release /etc/lsb_release; do
-     echo "checkingi if $file exists"
-     [ -f "$file" ] && echo "Sourcing $file" && . "$file" && break
+     [ -f "$file" ] && . "$file" && break
    done
 else
   error 'Failed to sniff environment'
@@ -55,7 +54,7 @@ run_as_root() {
 
 setup_color() {
 	# Only use colors if connected to a terminal
-	if [ -t 1 ]; then
+    if [ -t 1 ]; then
 		RED=$(printf '\033[31m')
 		GREEN=$(printf '\033[32m')
 		YELLOW=$(printf '\033[33m')
@@ -164,7 +163,7 @@ usage() {
   echo -e "\t--no-ssh-keygen\t\tSkip automated SSH key generation"
   echo -e "\t--no-gpg-keygen\t\tSkip interactive GPG key generation"
   echo -e "\t--no-git-config\t\tSkip interactive Git configuration"
-  echo -e "\t--no-ranger\t\tDo not install the Ranger file explorer"
+  echo -e "\t--no-gui\t\tDo not install the anything related to running a GUI"
   echo -e "\t--no-interactive\t\tSkip all interactive steps"
 }
 
@@ -228,26 +227,17 @@ packages() {
     kali)
       case $VERSION_ID in
         *)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
-          if [ "$install_ranger" = true ]; then
-            echo -n ' ranger'
-          fi
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
       esac
     ;;
     ubuntu|elementary)
       case $VERSION_ID in
         18.04|5.*)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
-          if [ "$install_ranger" = true ]; then
-            echo -n ' ranger'
-          fi
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
         20.04)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
-          if [ "$install_ranger" = true ]; then
-            echo -n ' ranger'
-          fi
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -258,16 +248,10 @@ packages() {
     debian)
       case $VERSION_ID in
         10)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
-          if [ "$install_ranger" = true ]; then
-            echo -n ' ranger'
-          fi
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
         9)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli'
-          if [ "$install_ranger" = true ]; then
-            echo -n ' ranger'
-          fi
+          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
         ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -277,26 +261,27 @@ packages() {
     alpine)
       case $VERSION_ID in
         3\.*)
-          echo -n 'git gnupg python3 py3-pip openssh-client bind-tools vim neofetch zsh dvtm'
-          if [ "$install_ranger" = true ]; then
-            echo -n ' ranger'
-          fi
+          echo -n 'git gnupg python3 py3-pip openssh-client bind-tools vim neofetch zsh dvtm ranger htop'
 	      ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
         ;;
-      esac
+      esac;
     ;;
-    arch)
-      echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm'
-      if [ "$install_ranger" = true ]; then
-        echo -n ' ranger'
+    arch|artix)
+      echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm ranger htop'
+      if [ "$gui" = true ]; then
+        # Install tools required to build custom St
+        echo -n ' make gcc'
+        # Install Window Manager and Utilities
+        echo -n ' sxhkd bspwm xorg-xrdb picom polybar gnome-keyring libsecret unclutter'
+        # Install tools for viewing PDFs
+        echo -n ' zathura zathura-pdf-mupdf'
+        # Install MPD and NCMPCPP
+        echo -n ' mpd ncmpcpp'
+        # Install fonts that are directly referenced in ~.Xprofile
+        echo -n ' gnu-free-fonts noto-fonts-emoji'
       fi
-    ;;
-    artix)
-      # It doesn't appear that dvtm is in the base Artix repos...
-      echo -n 'git gnupg openssh bind-tools vim neofetch zsh'
-      # Ranger doesn't appear to be there either
     ;;
     *)
       error "Unsupported OS: $NAME"
@@ -333,9 +318,30 @@ install() {
 }
 
 link_dotfiles() {
-  for file in .vimrc .zshenv .zshrc; do
+  for file in .vimrc .profile .zprofile .zshrc .xinitrc .xprofile .config; do
+    [ -r $HOME/$file ] && mv $HOME/$file $HOME/$file.orig
     ln -sf $DOTFILES/$file $HOME/$file
   done
+}
+
+install_custom_build() {
+  run_as_root ln -sf "/usr/local/src/$1" "$DOTFILES/src/$1"
+  make -C "$DOTFILES/src/$1" clean
+  run_as_root make -C "$DOTFILES/src/$1" install
+}
+
+install_custom_builds() {
+  if [ "$gui" = true ]; then
+    for src_dir in st; do
+      install_custom_build "${src_dir}"
+    done
+  fi
+}
+
+load_xresources() {
+  if [ "$gui" = true ] && command_exists xrdb; then
+    xrdb ${HOME}/.Xresources
+  fi
 }
 
 main() {
@@ -354,7 +360,7 @@ main() {
       --no-ssh-keygen) ssh_keygen=false ;;
       --no-gpg-keygen) gpg_keygen=false ;;
       --no-git-config) git_config=false ;;
-      --no-ranger) install_ranger=false ;;
+      --no-gui) gui=false ;;
       --no-interactive) chsh=false; ssh_keygen=false; gpg_keygen=false; git_config=false ;;
       *) usage >&2; exit 1 ;;
     esac
@@ -367,12 +373,15 @@ main() {
   add_repositories
   update
   install
+  install_custom_builds
   setup_ssh
   setup_gpg
   setup_shell
   setup_gitconfig
   clone_dotfiles
   link_dotfiles
+  load_xresources
+
 
   printf "$GREEN"
 	cat <<-'EOF'
