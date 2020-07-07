@@ -319,7 +319,7 @@ install() {
 
 link_dotfiles() {
   for file in .vimrc .profile .zprofile .zshrc .xinitrc .xprofile .config; do
-    mv $HOME/$file $HOME/$file.orig
+    [ -r $HOME/$file ] && mv $HOME/$file $HOME/$file.orig
     ln -sf $DOTFILES/$file $HOME/$file
   done
 }
