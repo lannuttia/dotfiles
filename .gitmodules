@@ -2,3 +2,6 @@
 	path = src/st
 	url = https://github.com/lannuttia/st
 	branch = master
+[submodule "src/surf"]
+	path = src/surf
+	url = https://github.com/lannuttia/surf

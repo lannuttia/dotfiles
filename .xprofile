@@ -5,6 +5,7 @@ command_exists() {
 case $XDG_SESSION_DESKTOP in
   bspwm|'')
     pulseaudio --start
+    mpd
     if command_exists picom; then
       picom -b
     elif command_exists compton; then

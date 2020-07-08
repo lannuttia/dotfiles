@@ -337,14 +337,14 @@ link_dotfiles() {
 }
 
 install_custom_build() {
-  run_as_root ln -sf "${DOTFILES}/src/${1}" "/usr/local/src/${1}"
-  make -C "$DOTFILES/src/$1" clean
-  run_as_root make -C "${DOTFILES}/src/${1}" install
+  run_as_root ln -sf "${1}" "/usr/local/src/$(basename $1)"
+  make -C "${1}" clean
+  run_as_root make -C "${1}" install
 }
 
 install_custom_builds() {
   if [ "$gui" = true ]; then
-    for src_dir in st; do
+    for src_dir in ${DOTFILES}/src/*; do
       install_custom_build "${src_dir}"
     done
   fi
