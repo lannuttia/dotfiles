@@ -37,5 +37,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run dev-container-install.sh
-        run: ./tools/dev-container-install.sh
+        run: ./tools/install.sh --no-interactive
 
