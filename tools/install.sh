@@ -228,6 +228,18 @@ packages() {
       case $VERSION_ID in
         *)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
+          if [ "$gui" = true ]; then
+            # Install tools required to build custom St
+            echo -n ' make gcc libx11-dev libxft-dev'
+            # Install Window Manager and Utilities
+            echo -n ' sxhkd bspwm x11-xserver-utils compton polybar gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
+            # Install tools for viewing PDFs
+            echo -n ' zathura zathura-pdf-poppler'
+            # Install MPD and NCMPCPP
+            echo -n ' mpd ncmpcpp'
+            # Install fonts that are directly referenced in ~.Xprofile
+            echo -n ' fonts-freefont-otf fonts-noto-color-emoji'
+          fi
         ;;
       esac
     ;;
@@ -274,7 +286,7 @@ packages() {
         # Install tools required to build custom St
         echo -n ' make gcc'
         # Install Window Manager and Utilities
-        echo -n ' sxhkd bspwm xorg-xrdb picom polybar gnome-keyring libsecret unclutter'
+        echo -n ' sxhkd bspwm xorg-xrdb picom polybar gnome-keyring libsecret unclutter feh'
         # Install tools for viewing PDFs
         echo -n ' zathura zathura-pdf-mupdf'
         # Install MPD and NCMPCPP
@@ -318,16 +330,16 @@ install() {
 }
 
 link_dotfiles() {
-  for file in .vimrc .profile .zprofile .zshrc .xinitrc .xprofile .config; do
+  for file in .vimrc .profile .zprofile .zshrc .xinitrc .xprofile .Xresources .fehbg .config; do
     [ -r $HOME/$file ] && mv $HOME/$file $HOME/$file.orig
-    ln -sf $DOTFILES/$file $HOME/$file
+    ln -sf "$DOTFILES/$file" "$HOME/$file"
   done
 }
 
 install_custom_build() {
-  run_as_root ln -sf "/usr/local/src/$1" "$DOTFILES/src/$1"
+  run_as_root ln -sf "${DOTFILES}/src/${1}" "/usr/local/src/${1}"
   make -C "$DOTFILES/src/$1" clean
-  run_as_root make -C "$DOTFILES/src/$1" install
+  run_as_root make -C "${DOTFILES}/src/${1}" install
 }
 
 install_custom_builds() {
@@ -335,12 +347,6 @@ install_custom_builds() {
     for src_dir in st; do
       install_custom_build "${src_dir}"
     done
-  fi
-}
-
-load_xresources() {
-  if [ "$gui" = true ] && command_exists xrdb; then
-    xrdb ${HOME}/.Xresources
   fi
 }
 
@@ -380,7 +386,6 @@ main() {
   setup_gitconfig
   clone_dotfiles
   link_dotfiles
-  load_xresources
 
 
   printf "$GREEN"
