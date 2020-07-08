@@ -321,9 +321,6 @@ install() {
   if [ ! -d $HOME/.oh-my-zsh ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
   fi
-  if command_exists az; then
-    az extension add --name azure-devops --name codespaces
-  fi
   if command_exists pip3; then
     pip3 install yq
   fi
