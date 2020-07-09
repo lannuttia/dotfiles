@@ -38,6 +38,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run non-interactive install
         env:
-          branch: ${GITHUB_REF#refs/head/}}
+          branch: ${GITHUB_REF#refs/head/}
         run: ./tools/install.sh --no-interactive
 
