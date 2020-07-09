@@ -36,6 +36,8 @@ jobs:
               DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v2
-      - name: Run dev-container-install.sh
+        with:
+          submodules: 'recursive'
+      - name: Run install.sh
         run: ./tools/install.sh --no-interactive
 
