@@ -342,7 +342,7 @@ install_custom_build() {
 
 install_custom_builds() {
   if [ "$gui" = true ]; then
-    for src_dir in ${DOTFILES}/src/*; do
+    for src_dir in ${DOTFILES}/src/st ${DOTFILES}/src/surf; do
       install_custom_build "${src_dir}"
     done
   fi
