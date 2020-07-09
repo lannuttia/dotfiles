@@ -377,13 +377,13 @@ main() {
   add_repositories
   update
   install
+  clone_dotfiles
+  link_dotfiles
   install_custom_builds
   setup_ssh
   setup_gpg
   setup_shell
   setup_gitconfig
-  clone_dotfiles
-  link_dotfiles
 
 
   printf "$GREEN"
