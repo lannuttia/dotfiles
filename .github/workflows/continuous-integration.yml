@@ -37,5 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run non-interactive install
-        run: branch=${GITHUB_REF#refs/head/} ./tools/install.sh --no-interactive
+        env:
+          _ref: ${{ github.ref }}
+        run: branch=${_ref#refs/head/} ./tools/install.sh --no-interactive
 
