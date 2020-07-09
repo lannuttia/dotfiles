@@ -36,10 +36,6 @@ jobs:
               DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v2
-      - name: Run install.sh W/O GUI
-        run: ./tools/install.sh --no-interactive --no-gui
-      - name: Initialize Submodules
-        run: git submodule update --init --recursive
-      - name: Run install.sh W/O GUI
+      - name: Run non-interactive install
         run: ./tools/install.sh --no-interactive
 
