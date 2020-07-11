@@ -94,7 +94,7 @@ clone_dotfiles() {
       error "git clone of Anthony Lannutti's Dotfiles repo failed"
       exit 1
     }
-    git submodule update -C $DOTFILES --init --recursive
+    git -C $DOTFILES submodule update --init --recursive
   fi
 
   echo
