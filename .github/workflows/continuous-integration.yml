@@ -36,8 +36,8 @@ jobs:
               DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v2
+      - name: Install CI Tools
+        run: ./tools/private/install-ci-tools.sh
       - name: Run non-interactive install
-        env:
-          _ref: ${{ github.ref }}
-        run: branch=${_ref#refs/head/} ./tools/install.sh --no-interactive
+        run: curl -fsSL "https://raw.githubusercontent.com/lannuttia/dotfiles/$(git rev-parse --abbrev-ref HEAD)/tools/install.sh" | branch=$(git rev-parse --abbrev-ref HEAD) sh -s -- --no-interactive
 
