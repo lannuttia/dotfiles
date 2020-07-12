@@ -39,5 +39,7 @@ jobs:
       - name: Install CI Tools
         run: ./tools/private/install-ci-tools.sh
       - name: Run non-interactive install
-        run: curl -fsSL "https://raw.githubusercontent.com/lannuttia/dotfiles/$(git rev-parse --abbrev-ref HEAD)/tools/install.sh" | branch=$(git rev-parse --abbrev-ref HEAD) sh -s -- --no-interactive
+        env:
+          branch: $(git rev-parse --abbrev-ref HEAD)
+        run: curl -fsSL "https://raw.githubusercontent.com/lannuttia/dotfiles/${branch}/tools/install.sh" | sh -s -- --no-interactive
 
