@@ -41,5 +41,5 @@ jobs:
       - name: Set Installation Environment Variables
         run: echo "::set-env name=branch::$(git rev-parse --abbrev-ref HEAD)"
       - name: Run non-interactive install
-        run: curl -fsSL "https://raw.githubusercontent.com/lannuttia/dotfiles/${branch}/tools/install.sh" | sh -s -- --no-interactive
+        run: curl -fsSL "https://raw.githubusercontent.com/lannuttia/dotfiles/$branch/tools/install.sh" | sh -s -- --no-interactive
 
