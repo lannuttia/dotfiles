@@ -45,7 +45,7 @@ packages() {
     kali)
       case $VERSION_ID in
         *)
-          echo -n 'curl'
+          echo -n 'curl git'
         ;;
       esac
     ;;
