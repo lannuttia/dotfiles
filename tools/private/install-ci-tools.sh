@@ -114,7 +114,27 @@ install() {
   esac
 }
 
+update() {
+  case $os in
+    debian|ubuntu)
+      run_as_root apt update
+    ;;
+    alpine)
+      run_as_root apk update
+    ;;
+    arch|artix)
+      run_as_root pacman -Sy
+    ;;
+    *)
+      error "Unsupported Distribution: $os"
+      exit 1
+    ;;
+  esac
+}
+
+
 main() {
+  update
   install
 }
 
