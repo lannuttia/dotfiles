@@ -39,7 +39,7 @@ jobs:
       - name: Install CI Tools
         run: ./tools/private/install-ci-tools.sh
       - name: Set Installation Environment Variables
-        run: echo "::set-env name=branch::$(git rev-parse --abbrev-ref HEAD)"
+        run: echo "::set-env name=branch::$(git -C $GITHUB_WORKSPACE rev-parse --abbrev-ref HEAD)"
       - name: Run non-interactive install
         run: curl -fsSL "https://raw.githubusercontent.com/lannuttia/dotfiles/$branch/tools/install.sh" | sh -s -- --no-interactive
 
