@@ -36,6 +36,11 @@ jobs:
               DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v2
-      - name: Run dev-container-install.sh
-        run: ./tools/dev-container-install.sh
+      - name: Setup CI Environment
+        run: ./tools/_install-ci-tools.sh
+      - uses: actions/checkout@v2
+        with:
+          path: ${HOME}/.dotfiles
+      - name: Run Install
+        run: ./tools/install.sh --no-interactive 
 
