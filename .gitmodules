@@ -2,3 +2,7 @@
 	path = src/st
 	url = https://github.com/lannuttia/st
 	branch = master
+[submodule "src/dwm"]
+	path = src/dwm
+	url = https://github.com/lannuttia/dwm
+	branch = master

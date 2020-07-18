@@ -95,6 +95,11 @@ clone_dotfiles() {
       exit 1
     }
   fi
+  echo "Before cloning submodules"
+  echo "DOTFILES=$DOTFILES"
+  echo "branch=$branch"
+  git -C "$DOTFILES" submodule update --init --recursive
+  echo "After cloning submodules"
 
   echo
 }
@@ -230,9 +235,9 @@ packages() {
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
             # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev libxft-dev'
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
             # Install Window Manager and Utilities
-            echo -n ' sxhkd bspwm x11-xserver-utils compton polybar gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
+            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
             echo -n ' zathura zathura-pdf-poppler'
             # Install MPD and NCMPCPP
@@ -247,9 +252,33 @@ packages() {
       case $VERSION_ID in
         18.04|5.*)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
+          if [ "$gui" = true ]; then
+            # Install tools required to build custom St
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
+            # Install Window Manager and Utilities
+            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
+            # Install tools for viewing PDFs
+            echo -n ' zathura zathura-pdf-poppler'
+            # Install MPD and NCMPCPP
+            echo -n ' mpd ncmpcpp'
+            # Install fonts that are directly referenced in ~.Xprofile
+            echo -n ' fonts-freefont-otf fonts-noto-color-emoji'
+          fi
         ;;
         20.04)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
+          if [ "$gui" = true ]; then
+            # Install tools required to build custom St
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
+            # Install Window Manager and Utilities
+            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
+            # Install tools for viewing PDFs
+            echo -n ' zathura zathura-pdf-poppler'
+            # Install MPD and NCMPCPP
+            echo -n ' mpd ncmpcpp'
+            # Install fonts that are directly referenced in ~.Xprofile
+            echo -n ' fonts-freefont-otf fonts-noto-color-emoji'
+          fi
         ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -261,9 +290,33 @@ packages() {
       case $VERSION_ID in
         10)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
+          if [ "$gui" = true ]; then
+            # Install tools required to build custom St
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
+            # Install Window Manager and Utilities
+            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
+            # Install tools for viewing PDFs
+            echo -n ' zathura zathura-pdf-poppler'
+            # Install MPD and NCMPCPP
+            echo -n ' mpd ncmpcpp'
+            # Install fonts that are directly referenced in ~.Xprofile
+            echo -n ' fonts-freefont-otf fonts-noto-color-emoji'
+          fi
         ;;
         9)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
+          if [ "$gui" = true ]; then
+            # Install tools required to build custom St
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
+            # Install Window Manager and Utilities
+            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
+            # Install tools for viewing PDFs
+            echo -n ' zathura zathura-pdf-poppler'
+            # Install MPD and NCMPCPP
+            echo -n ' mpd ncmpcpp'
+            # Install fonts that are directly referenced in ~.Xprofile
+            echo -n ' fonts-freefont-otf'
+          fi
         ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -274,6 +327,7 @@ packages() {
       case $VERSION_ID in
         3\.*)
           echo -n 'git gnupg python3 py3-pip openssh-client bind-tools vim neofetch zsh dvtm ranger htop'
+          # GUI support for alpine doesn't exist because my custom st build requires glibc
 	      ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -284,9 +338,9 @@ packages() {
       echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm ranger htop'
       if [ "$gui" = true ]; then
         # Install tools required to build custom St
-        echo -n ' make gcc'
+        echo -n ' make gcc pkgconf libxft'
         # Install Window Manager and Utilities
-        echo -n ' sxhkd bspwm xorg-xrdb picom polybar gnome-keyring libsecret unclutter feh'
+        echo -n ' xorg-xrdb picom gnome-keyring libsecret unclutter feh'
         # Install tools for viewing PDFs
         echo -n ' zathura zathura-pdf-mupdf'
         # Install MPD and NCMPCPP
@@ -337,15 +391,19 @@ link_dotfiles() {
 }
 
 install_custom_build() {
-  run_as_root ln -sf "${DOTFILES}/src/${1}" "/usr/local/src/${1}"
-  make -C "$DOTFILES/src/$1" clean
-  run_as_root make -C "${DOTFILES}/src/${1}" install
+  dirname=$(basename "${1}")
+  run_as_root ln -sf "${1}" "/usr/local/src/${dirname}"
+  make -C "${1}" clean
+  run_as_root make -C "${1}" install
 }
 
 install_custom_builds() {
-  if [ "$gui" = true ]; then
-    for src_dir in st; do
-      install_custom_build "${src_dir}"
+  # My builds require glibc so I cannot support alpine linux
+  if [ "$gui" = true ] && [ "$os" != alpine ]; then
+    for match in ${DOTFILES}/src/*; do
+      if [ -d "${match}" ]; then
+        install_custom_build "${match}"
+      fi
     done
   fi
 }
@@ -379,13 +437,13 @@ main() {
   add_repositories
   update
   install
+  clone_dotfiles
+  link_dotfiles
   install_custom_builds
   setup_ssh
   setup_gpg
   setup_shell
   setup_gitconfig
-  clone_dotfiles
-  link_dotfiles
 
 
   printf "$GREEN"

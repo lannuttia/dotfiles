@@ -5,8 +5,6 @@ echo "After killall"
 sxhkd &
 polybar main &
 
-${HOME}/.fehbg
-
 bspc monitor -d I II III IV V VI VII VIII IX X
 
 dropdown_name="dropdown"
