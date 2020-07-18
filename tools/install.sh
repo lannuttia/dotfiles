@@ -391,16 +391,19 @@ link_dotfiles() {
 }
 
 install_custom_build() {
-  run_as_root ln -sf "${DOTFILES}/src/${1}" "/usr/local/src/${1}"
-  make -C "$DOTFILES/src/$1" clean
-  run_as_root make -C "${DOTFILES}/src/${1}" install
+  dirname=$(basename "${1}")
+  run_as_root ln -sf "${1}" "/usr/local/src/${dirname}"
+  make -C "${1}" clean
+  run_as_root make -C "${1}" install
 }
 
 install_custom_builds() {
   # My builds require glibc so I cannot support alpine linux
   if [ "$gui" = true ] && [ "$os" != alpine ]; then
-    for src_dir in st; do
-      install_custom_build "${src_dir}"
+    for match in ${DOTFILES}/src/*; do
+      if [ -d "${match}" ]; then
+        install_custom_build "${match}"
+      fi
     done
   fi
 }

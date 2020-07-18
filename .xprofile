@@ -2,17 +2,32 @@ command_exists() {
   command -v "$@" >/dev/null 2>&1
 }
 
+start_pulseaudio() {
+  pulseaudio --check || pulseaudio --start
+}
+
+start_compositor() {
+  if command_exists picom; then
+    pidof picom || picom -b
+  elif command_exists compton; then
+    pidof compton || compton -b
+  elif command_exists xcompmgr; then
+    pidof xcompmrg || xcompmgr &
+  fi
+}
+
+start_unclutter() {
+  if command_exists unclutter; then
+    pidof unclutter || unclutter &
+  fi
+}
+
 case $XDG_SESSION_DESKTOP in
-  bspwm|'')
-    pulseaudio --start
-    if command_exists picom; then
-      picom -b
-    elif command_exists compton; then
-      compton -b
-    elif command_exists xcompmgr; then
-      xcompmgr &
-    fi
-    unclutter &
+  dwm|bspwm|'')
+    start_pulseaudio
+    start_compositor
+    start_unclutter
+    ${HOME}/.fehbg
     ;;
   default)
     # Do nothing
