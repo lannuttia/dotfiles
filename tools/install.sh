@@ -235,7 +235,7 @@ packages() {
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
             # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
