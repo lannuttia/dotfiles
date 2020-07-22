@@ -235,7 +235,7 @@ packages() {
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
             # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -254,7 +254,7 @@ packages() {
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
             # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -269,7 +269,7 @@ packages() {
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
             # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -292,7 +292,7 @@ packages() {
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
             # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
+            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -305,18 +305,7 @@ packages() {
         ;;
         9)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
-          if [ "$gui" = true ]; then
-            # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev'
-            # Install Window Manager and Utilities
-            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
-            # Install tools for viewing PDFs
-            echo -n ' zathura zathura-pdf-poppler'
-            # Install MPD and NCMPCPP
-            echo -n ' mpd ncmpcpp'
-            # Install fonts that are directly referenced in ~.Xprofile
-            echo -n ' fonts-freefont-otf'
-          fi
+          # GUI support for Debian 9 doesn't exist because my custom builds require a newer version of fontconfig than exists in the debian 9 repos
         ;;
         *)
           error "Unsupported version of $NAME: $VERSION_ID"
@@ -399,7 +388,7 @@ install_custom_build() {
 
 install_custom_builds() {
   # My builds require glibc so I cannot support alpine linux
-  if [ "$gui" = true ] && [ "$os" != alpine ]; then
+  if [ "$gui" = true -a "$os" != alpine -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
     for match in ${DOTFILES}/src/*; do
       if [ -d "${match}" ]; then
         install_custom_build "${match}"
