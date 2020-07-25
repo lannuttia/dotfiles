@@ -51,6 +51,7 @@ St.font:            FreeMono:pixelsize=12,Noto Color Emoji:pixelsize=12
 St.alpha:           0.85
 
 !! Dwm specific configuration
+dwm.font:           FreeMono:pixelsize=12,Noto Color Emoji:pixelsize=12
 dwm.normfgcolor:    nord4
 dwm.normbgcolor:    nord0
 dwm.selfgcolor:     nord8

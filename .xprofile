@@ -22,6 +22,12 @@ start_unclutter() {
   fi
 }
 
+start_dwmbar() {
+  if command_exists dwmbar; then
+    pidof dwmbar || dwmbar &
+  fi
+}
+
 start_mpd() {
   if command_exists mpd; then
     pidof mpd || mpd
@@ -35,6 +41,7 @@ case $XDG_SESSION_DESKTOP in
     start_compositor
     start_unclutter
     ${HOME}/.fehbg
+    start_dwmbar
     ;;
   default)
     # Do nothing
