@@ -1,0 +1,81 @@
+#!/bin/sh
+
+
+if [ -z "${XDG_RUNTIME_DIR}" ]; then
+  echo "XDG_RUNTIME_DIR is either an empty string or not set"
+else
+  runtime_dir="${XDG_RUNTIME_DIR}/dwm-status"
+  weather_data="${runtime_dir}/weather"
+  moon_data="${runtime_dir}/moon"
+  date_data="${runtime_dir}/date"
+  mkdir -p "${runtime_dir}"
+
+  poll_weather() {
+    default="Unknown"
+    poll_interval="10m"
+    while true; do
+      (curl -fsSL 'wttr.in?format=2' | xargs echo -n || echo -n "${default}")> "${weather_data}"
+      sleep "${poll_interval}"
+    done
+  }
+
+  poll_moon() {
+    default="Unknown"
+    poll_interval="1d"
+    while true; do
+      (curl -fsSL 'wttr.in?format=%m' || echo -n "${default}")> "${moon_data}"
+      sleep "${poll_interval}"
+    done
+  }
+
+  poll_date() {
+    poll_interval="1"
+    while true; do
+      date > "${date_data}"
+      sleep "${poll_interval}"
+    done
+  }
+
+  ethernet_state() {
+    if cat /sys/class/net/e*/operstate | grep -q 'up'; then
+      echo -n "Ethernet is up"
+    else
+      echo -n "Ethernet is down"
+    fi
+  }
+
+  wifi_state() {
+    if cat /sys/class/net/w*/operstate | grep -q 'up'; then
+      echo -n "Wifi is up"
+    else
+      echo -n "Wifi is down"
+    fi
+  }
+
+  status() {
+    delim=' | '
+    cat "${XDG_RUNTIME_DIR}/dwm-status/weather"
+    echo -n "${delim}"
+    cat "${XDG_RUNTIME_DIR}/dwm-status/moon"
+    echo -n "${delim}"
+    ethernet_state
+    echo -n "${delim}"
+    wifi_state 
+    echo -n "${delim}"
+    cat "${XDG_RUNTIME_DIR}/dwm-status/date"
+  }
+
+  main() {
+    poll_weather &
+    poll_moon &
+    poll_date &
+    while true; do
+      status
+      xsetroot -name "$(status)"
+      sleep 1
+    done
+  }
+  
+  main
+fi
+

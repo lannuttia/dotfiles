@@ -22,12 +22,19 @@ start_unclutter() {
   fi
 }
 
+start_dwmbar() {
+  if command_exists dwmbar; then
+    pidof dwmbar || dwmbar &
+  fi
+}
+
 case $XDG_SESSION_DESKTOP in
   dwm|bspwm|'')
     start_pulseaudio
     start_compositor
     start_unclutter
     ${HOME}/.fehbg
+    start_dwmbar
     ;;
   default)
     # Do nothing

@@ -8,3 +8,7 @@
 !/.config/polybar
 !/.config/sxhkd
 
+/.local/*
+!/.local/bin
+/.local/bin/*
+!/.local/bin/dwmbar
