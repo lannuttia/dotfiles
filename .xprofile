@@ -22,9 +22,16 @@ start_unclutter() {
   fi
 }
 
+start_mpd() {
+  if command_exists mpd; then
+    pidof mpd || mpd
+  fi
+}
+
 case $XDG_SESSION_DESKTOP in
   dwm|bspwm|'')
     start_pulseaudio
+    start_mpd
     start_compositor
     start_unclutter
     ${HOME}/.fehbg
