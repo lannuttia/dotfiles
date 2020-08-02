@@ -381,7 +381,7 @@ link_dotfiles() {
 
 install_custom_build() {
   dirname=$(basename "${1}")
-  run_as_root ln -sf "${1}" "/usr/local/src/${dirname}"
+  run_as_root ln -sf "${1}" "${HOME}/.local/src/${dirname}"
   make -C "${1}" clean
   run_as_root make -C "${1}" install
 }
@@ -389,6 +389,7 @@ install_custom_build() {
 install_custom_builds() {
   # My builds require glibc so I cannot support alpine linux
   if [ "$gui" = true -a "$os" != alpine -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
+    mkdir -p "${HOME}/.local/src"
     for match in ${DOTFILES}/src/*; do
       if [ -d "${match}" ]; then
         install_custom_build "${match}"
