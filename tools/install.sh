@@ -234,8 +234,6 @@ packages() {
         *)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
-            # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -253,8 +251,6 @@ packages() {
         18.04|5.*)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
-            # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -268,8 +264,6 @@ packages() {
         20.04)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
-            # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -291,8 +285,6 @@ packages() {
         10)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
-            # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -326,8 +318,6 @@ packages() {
     arch|artix)
       echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm ranger htop'
       if [ "$gui" = true ]; then
-        # Install tools required to build custom St
-        echo -n ' make gcc pkgconf libxft'
         # Install Window Manager and Utilities
         echo -n ' xorg-xrdb picom gnome-keyring libsecret unclutter feh'
         # Install tools for viewing PDFs
@@ -392,6 +382,7 @@ install_custom_builds() {
     mkdir -p "${HOME}/.local/src"
     for match in ${DOTFILES}/src/*; do
       if [ -d "${match}" ]; then
+        [ -x "${match}/bootstrap.sh"] && . "${match}/bootstrap.sh"
         install_custom_build "${match}"
       fi
     done
