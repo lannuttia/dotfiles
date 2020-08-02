@@ -382,7 +382,7 @@ install_custom_builds() {
     mkdir -p "${HOME}/.local/src"
     for match in ${DOTFILES}/src/*; do
       if [ -d "${match}" ]; then
-        [ -x "${match}/bootstrap.sh"] && . "${match}/bootstrap.sh"
+        [ -x "${match}/bootstrap.sh" ] && . "${match}/bootstrap.sh"
         install_custom_build "${match}"
       fi
     done
