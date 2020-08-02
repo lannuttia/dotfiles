@@ -378,7 +378,7 @@ install_custom_build() {
 
 install_custom_builds() {
   # My builds require glibc so I cannot support alpine linux
-  if [ "$gui" = true -a "$os" != alpine -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
+  if [ "$gui" = true -a "$os" != alpine -a "$os" != elementary -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
     mkdir -p "${HOME}/.local/src"
     for match in ${DOTFILES}/src/*; do
       if [ -d "${match}" ]; then
