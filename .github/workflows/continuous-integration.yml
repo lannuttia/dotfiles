@@ -38,13 +38,12 @@ jobs:
       - name: Setup CI Environment
         run: |
           if [ "${{ matrix.container.image }}" = "archlinux" ]; then
-            pacman -Syu --noconfirm && pacman -S --noconfirm git
+            pacman -Syu --noconfirm && pacman -S --noconfirm curl
           elif [ "${{ matrix.container.image }}" = "alpine:3" ]; then
-            apk update && apk add git
+            apk update && apk add curl
           else
-            apt update && apt install -y git
+            apt update && apt install -y curl
           fi
-      - uses: actions/checkout@v2
       - name: Run Install
-        run: DOTFILES="${GITHUB_WORKSPACE}" ./tools/install.sh --no-interactive
+        run: branch="${GITHUB_SHA}" curl-fsSL "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_SHA}/tools/install.sh" | sh -s -- --no-interactive
 
