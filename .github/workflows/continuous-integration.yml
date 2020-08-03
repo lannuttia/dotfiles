@@ -45,5 +45,5 @@ jobs:
             apt update && apt install -y curl
           fi
       - name: Run Install
-        run: branch="${GITHUB_SHA}" curl-fsSL "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_SHA}/tools/install.sh" | sh -s -- --no-interactive
+        run: branch="${GITHUB_SHA}" curl -fsSL "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_SHA}/tools/install.sh" | sh -s -- --no-interactive
 
