@@ -95,11 +95,7 @@ clone_dotfiles() {
       exit 1
     }
   fi
-  echo "Before cloning submodules"
-  echo "DOTFILES=$DOTFILES"
-  echo "branch=$branch"
   git -C "$DOTFILES" submodule update --init --recursive
-  echo "After cloning submodules"
 
   echo
 }
