@@ -36,11 +36,8 @@ jobs:
               DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v2
-      - name: Setup CI Environment
-        run: ./tools/_install-ci-tools.sh
-      - uses: actions/checkout@v2
         with:
           path: ${HOME}/.dotfiles
       - name: Run Install
-        run: branch="$(git -C "${HOME}/.dotfiles" branch --show-current)" ./tools/install.sh --no-interactive 
+        run: ./tools/install.sh --no-interactive
 
