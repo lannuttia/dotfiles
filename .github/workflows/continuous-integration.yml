@@ -15,25 +15,41 @@ jobs:
       matrix:
         container:
           - image: alpine:3
+            volume:
+              - /var/run/docker.sock:/var/run/docker.sock
           - image: archlinux
+            volume:
+              - /var/run/docker.sock:/var/run/docker.sock
           - image: debian:9
             env:
               DEBIAN_FRONTEND: noninteractive
+            volume:
+              - /var/run/docker.sock:/var/run/docker.sock
           - image: debian:10
             env:
               DEBIAN_FRONTEND: noninteractive
+            volume:
+              - /var/run/docker.sock:/var/run/docker.sock
           - image: elementary/docker:stable
             env:
               DEBIAN_FRONTEND: noninteractive
+            volume:
+              - /var/run/docker.sock:/var/run/docker.sock
           - image: kalilinux/kali-rolling
             env:
               DEBIAN_FRONTEND: noninteractive
+            volume:
+              - /var/run/docker.sock:/var/run/docker.sock
           - image: ubuntu:18.04
             env:
               DEBIAN_FRONTEND: noninteractive
+            volume:
+              - /var/run/docker.sock:/var/run/docker.sock
           - image: ubuntu:20.04
             env:
               DEBIAN_FRONTEND: noninteractive
+            volume:
+              - /var/run/docker.sock:/var/run/docker.sock
     steps:
       - name: Setup CI Environment
         run: |
@@ -45,8 +61,6 @@ jobs:
             apt update && apt install -y git
           fi
       - uses: actions/checkout@v2
-        with:
-          path: ${HOME}/.dotfiles
       - name: Run Install
-        run: ./tools/install.sh --no-interactive
+        run: DOTFILES="${GITHUB_WORKSPACE}" ./tools/install.sh --no-interactive
 
