@@ -36,12 +36,10 @@ jobs:
               DEBIAN_FRONTEND: noninteractive
     steps:
       - name: Setup CI Environment
-        env:
-          image: ${{ matrix.image }}
         run: |
-          if [ "${image}" = "archlinux" ]; then
+          if [ "${{ matrix.container.image }}" = "archlinux" ]; then
             pacman -Syu --noconfirm && pacman -S --noconfirm git
-          elif [ "${image}" = "alpine:3" ]; then
+          elif [ "${{ matrix.container.image }}" = "alpine:3" ]; then
             apk update && apk add git
           else
             apt update && apt install -y git
