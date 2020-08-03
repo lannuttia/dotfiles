@@ -35,6 +35,15 @@ jobs:
             env:
               DEBIAN_FRONTEND: noninteractive
     steps:
+      - name: Setup CI Environment
+        run: |
+          if [ "${{ matrix.image }}" = "archlinux" ]; then
+            pacman -Syu --noconfirm && pacman -S --noconfirm git
+          elif [ "${{ matrix.image }}" = "alpine:3" ]; then
+            apk update && apk add git
+          else
+            apt update && apt install -y git
+          fi
       - uses: actions/checkout@v2
         with:
           path: ${HOME}/.dotfiles
