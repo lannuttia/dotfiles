@@ -42,5 +42,5 @@ jobs:
         with:
           path: ${HOME}/.dotfiles
       - name: Run Install
-        run: ./tools/install.sh --no-interactive 
+        run: branch="$(git branch --show-current)" ./tools/install.sh --no-interactive 
 
