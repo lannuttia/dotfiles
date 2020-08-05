@@ -365,10 +365,9 @@ install() {
 }
 
 link_dotfiles() {
-  for file in .vimrc .profile .zprofile .zshrc .xinitrc .xprofile .Xresources .fehbg .config; do
-    [ -r $HOME/$file ] && mv $HOME/$file $HOME/$file.orig
-    ln -sf "$DOTFILES/$file" "$HOME/$file"
-  done
+  dotfiles="$(git ls-files -- ':!:tools' ':!:src' ':!:*.md' ':!:.github' ':!:.gitignore' ':!:.gitmodules' ':!:.devcontainer')"
+  echo "${dotfiles}" | xargs -n1 dirname | sort | uniq | xargs -n1 -I '{}' mkdir -p "${HOME}/{}"
+  echo "${dotfiles}" | xargs -n1 -I '{}' ln -sf "${DOTFILES}/{}" "${HOME}/{}"
 }
 
 install_custom_build() {
@@ -382,11 +381,9 @@ install_custom_builds() {
   # My builds require glibc so I cannot support alpine linux
   if [ "$gui" = true -a "$os" != alpine -a "$os" != elementary -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
     mkdir -p "${HOME}/.local/src"
-    for match in ${DOTFILES}/src/*; do
-      if [ -d "${match}" ]; then
-        [ -x "${match}/bootstrap.sh" ] && . "${match}/bootstrap.sh"
-        install_custom_build "${match}"
-      fi
+    git submodule foreach --quiet --recursive '[ -x bootstrap.sh ] && ./bootstrap.sh'
+    for submodule in $(git submodule foreach --quiet --recursive 'echo "$name"'); do
+      install_custom_build "${submodule}"
     done
   fi
 }
