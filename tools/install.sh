@@ -365,7 +365,7 @@ install() {
 }
 
 link_dotfiles() {
-  dotfiles="$(git ls-files -- ':!:tools' ':!:src' ':!:*.md' ':!:.github' ':!:.gitignore' ':!:.gitmodules' ':!:.devcontainer')"
+  dotfiles="$(git -C "${DOTFILES}" ls-files -- ':!:tools' ':!:src' ':!:*.md' ':!:.github' ':!:.gitignore' ':!:.gitmodules' ':!:.devcontainer')"
   echo "${dotfiles}" | xargs -n1 dirname | sort | uniq | xargs -n1 -I '{}' mkdir -p "${HOME}/{}"
   echo "${dotfiles}" | xargs -n1 -I '{}' ln -sf "${DOTFILES}/{}" "${HOME}/{}"
 }
@@ -381,8 +381,8 @@ install_custom_builds() {
   # My builds require glibc so I cannot support alpine linux
   if [ "$gui" = true -a "$os" != alpine -a "$os" != elementary -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
     mkdir -p "${HOME}/.local/src"
-    git submodule foreach --quiet --recursive '[ -x bootstrap.sh ] && ./bootstrap.sh'
-    for submodule in $(git submodule foreach --quiet --recursive 'echo "$name"'); do
+    git -C "${DOTFILES}" submodule foreach --quiet --recursive '[ -x bootstrap.sh ] && ./bootstrap.sh'
+    for submodule in $(git -C "${DOTFILES}" submodule foreach --quiet --recursive 'echo "$name"'); do
       install_custom_build "${submodule}"
     done
   fi
