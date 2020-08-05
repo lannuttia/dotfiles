@@ -16,7 +16,6 @@ jobs:
         container:
           - image: alpine:3
           - image: archlinux
-          - image: artixlinux/base 
           - image: debian:10
             env:
               DEBIAN_FRONTEND: noninteractive
