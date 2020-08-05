@@ -148,7 +148,6 @@ setup_ssh() {
 }
 
 setup_gpg() {
-  echo $gpg_keygen
   if [ "$gpg_keygen" = true ]; then
     if command_exists gpg2; then
       gpg2 --full-generate-key
