@@ -95,7 +95,7 @@ clone_dotfiles() {
       exit 1
     }
     if [ ! -z "${sha}" ]; then
-      git checkout -C "${DOTFILES}" "${sha}" || {
+      git -C "${DOTFILES}" checkout "${sha}" || {
       error "git checkout of Anthony Lannutti's Dotfiles repo at ${sha} failed"
       exit 1
       }
