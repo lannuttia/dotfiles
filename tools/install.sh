@@ -84,7 +84,6 @@ clone_dotfiles() {
 		error "Make sure the Cygwin git package is installed and is first on the \$PATH"
 		exit 1
 	fi
-
   if [ ! -d $DOTFILES ]; then
     git clone -c core.eol=lf \
       -c fsck.zeroPaddedFilemode=ignore \
@@ -94,9 +93,9 @@ clone_dotfiles() {
       error "git clone of Anthony Lannutti's Dotfiles repo failed"
       exit 1
     }
-    if [ ! -z "${sha}" ]; then
-      git -C "${DOTFILES}" checkout "${sha}" || {
-      error "git checkout of Anthony Lannutti's Dotfiles repo at ${sha} failed"
+    if [ ! -z "${ref}" ]; then
+      git -C "${DOTFILES}" checkout "${ref}" || {
+      error "git checkout of Anthony Lannutti's Dotfiles repo at ${ref} failed"
       exit 1
       }
     fi
