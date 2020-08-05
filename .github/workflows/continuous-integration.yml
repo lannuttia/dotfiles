@@ -16,31 +16,26 @@ jobs:
         container:
           - image: alpine:3
           - image: archlinux
-          - image: debian:9
-            env:
-              DEBIAN_FRONTEND: noninteractive
           - image: debian:10
             env:
               DEBIAN_FRONTEND: noninteractive
-          - image: elementary/docker:stable
-            env:
-              DEBIAN_FRONTEND: noninteractive
           - image: kalilinux/kali-rolling
-            env:
-              DEBIAN_FRONTEND: noninteractive
-          - image: ubuntu:18.04
             env:
               DEBIAN_FRONTEND: noninteractive
           - image: ubuntu:20.04
             env:
               DEBIAN_FRONTEND: noninteractive
     steps:
-      - uses: actions/checkout@v2
       - name: Setup CI Environment
-        run: ./tools/_install-ci-tools.sh
+        run: |
+          if [ "${{ matrix.container.image }}" = "archlinux" -o "${{ matrix.container.image }}" = "artixlinux/base" ]; then
+            pacman -Syu --noconfirm && pacman -S --noconfirm git
+          elif [ "${{ matrix.container.image }}" = "alpine:3" ]; then
+            apk update && apk add git
+          else
+            apt update && apt install -y git
+          fi
       - uses: actions/checkout@v2
-        with:
-          path: ${HOME}/.dotfiles
       - name: Run Install
-        run: ./tools/install.sh --no-interactive 
+        run: DOTFILES="${GITHUB_WORKSPACE}" ./tools/install.sh --no-interactive
 

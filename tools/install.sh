@@ -84,7 +84,6 @@ clone_dotfiles() {
 		error "Make sure the Cygwin git package is installed and is first on the \$PATH"
 		exit 1
 	fi
-
   if [ ! -d $DOTFILES ]; then
     git clone -c core.eol=lf \
       -c fsck.zeroPaddedFilemode=ignore \
@@ -94,12 +93,14 @@ clone_dotfiles() {
       error "git clone of Anthony Lannutti's Dotfiles repo failed"
       exit 1
     }
+    if [ ! -z "${ref}" ]; then
+      git -C "${DOTFILES}" checkout "${ref}" || {
+      error "git checkout of Anthony Lannutti's Dotfiles repo at ${ref} failed"
+      exit 1
+      }
+    fi
   fi
-  echo "Before cloning submodules"
-  echo "DOTFILES=$DOTFILES"
-  echo "branch=$branch"
   git -C "$DOTFILES" submodule update --init --recursive
-  echo "After cloning submodules"
 
   echo
 }
@@ -234,8 +235,6 @@ packages() {
         *)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
-            # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -253,8 +252,6 @@ packages() {
         18.04|5.*)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
-            # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -268,8 +265,6 @@ packages() {
         20.04)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
-            # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -291,8 +286,6 @@ packages() {
         10)
           echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
           if [ "$gui" = true ]; then
-            # Install tools required to build custom St
-            echo -n ' make gcc libx11-dev pkgconf libxft-dev libxinerama-dev'
             # Install Window Manager and Utilities
             echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
             # Install tools for viewing PDFs
@@ -326,8 +319,6 @@ packages() {
     arch|artix)
       echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm ranger htop'
       if [ "$gui" = true ]; then
-        # Install tools required to build custom St
-        echo -n ' make gcc pkgconf libxft'
         # Install Window Manager and Utilities
         echo -n ' xorg-xrdb picom gnome-keyring libsecret unclutter feh'
         # Install tools for viewing PDFs
@@ -373,26 +364,25 @@ install() {
 }
 
 link_dotfiles() {
-  for file in .vimrc .profile .zprofile .zshrc .xinitrc .xprofile .Xresources .fehbg .config; do
-    [ -r $HOME/$file ] && mv $HOME/$file $HOME/$file.orig
-    ln -sf "$DOTFILES/$file" "$HOME/$file"
-  done
+  dotfiles="$(git -C "${DOTFILES}" ls-files -- ':!:tools' ':!:src' ':!:*.md' ':!:.github' ':!:.gitignore' ':!:.gitmodules' ':!:.devcontainer')"
+  echo "${dotfiles}" | xargs -n1 dirname | sort | uniq | xargs -n1 -I '{}' mkdir -p "${HOME}/{}"
+  echo "${dotfiles}" | xargs -n1 -I '{}' ln -sf "${DOTFILES}/{}" "${HOME}/{}"
 }
 
 install_custom_build() {
   dirname=$(basename "${1}")
-  run_as_root ln -sf "${1}" "/usr/local/src/${dirname}"
+  run_as_root ln -sf "${1}" "${HOME}/.local/src/${dirname}"
   make -C "${1}" clean
   run_as_root make -C "${1}" install
 }
 
 install_custom_builds() {
   # My builds require glibc so I cannot support alpine linux
-  if [ "$gui" = true -a "$os" != alpine -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
-    for match in ${DOTFILES}/src/*; do
-      if [ -d "${match}" ]; then
-        install_custom_build "${match}"
-      fi
+  if [ "$gui" = true -a "$os" != alpine -a "$os" != elementary -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
+    mkdir -p "${HOME}/.local/src"
+    git -C "${DOTFILES}" submodule foreach --quiet --recursive '[ -x bootstrap.sh ] && ./bootstrap.sh'
+    for submodule in $(git -C "${DOTFILES}" submodule foreach --quiet --recursive 'echo "$name"'); do
+      install_custom_build "${submodule}"
     done
   fi
 }
