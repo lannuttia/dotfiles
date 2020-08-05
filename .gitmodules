@@ -8,5 +8,5 @@
 	branch = master
 [submodule "src/dwmblocks"]
 	path = src/dwmblocks
-	url = git@github.com:lannuttia/dwmblocks.git
+	url = https://github.com/lannuttia/dwmblocks
 	branch = master
