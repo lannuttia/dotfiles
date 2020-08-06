@@ -363,7 +363,7 @@ install() {
 }
 
 link_dotfiles() {
-  dotfiles="$(git -C "${DOTFILES}" ls-files -- ':!:tools' ':!:src' ':!:*.md' ':!:.github' ':!:.gitignore' ':!:.gitmodules' ':!:.devcontainer')"
+  dotfiles="$(git -C "${DOTFILES}" ls-files -- ':!:tools' ':!:images' ':!:src' ':!:*.md' ':!:.github' ':!:.gitignore' ':!:.gitmodules' ':!:.devcontainer')"
   echo "${dotfiles}" | xargs -n1 dirname | sort | uniq | xargs -n1 -I '{}' mkdir -p "${HOME}/{}"
   echo "${dotfiles}" | xargs -n1 -I '{}' ln -sf "${DOTFILES}/{}" "${HOME}/{}"
 }
