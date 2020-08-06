@@ -34,14 +34,20 @@ start_mpd() {
   fi
 }
 
+start_dwmblocks() {
+  if command_exists dwmblocks; then
+    pidof dwmblocks || dwmblocks &
+  fi
+}
+
 case $XDG_SESSION_DESKTOP in
   dwm|bspwm|'')
     start_pulseaudio
     start_mpd
+    start_dwmblocks
     start_compositor
     start_unclutter
     ${HOME}/.fehbg
-    start_dwmbar
     ;;
   default)
     # Do nothing
