@@ -6,3 +6,7 @@
 	path = src/dwm
 	url = https://github.com/lannuttia/dwm
 	branch = master
+[submodule "src/dwmblocks"]
+	path = src/dwmblocks
+	url = https://github.com/lannuttia/dwmblocks
+	branch = master

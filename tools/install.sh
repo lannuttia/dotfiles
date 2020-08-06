@@ -148,7 +148,6 @@ setup_ssh() {
 }
 
 setup_gpg() {
-  echo $gpg_keygen
   if [ "$gpg_keygen" = true ]; then
     if command_exists gpg2; then
       gpg2 --full-generate-key
@@ -371,9 +370,9 @@ link_dotfiles() {
 
 install_custom_build() {
   dirname=$(basename "${1}")
-  run_as_root ln -sf "${1}" "${HOME}/.local/src/${dirname}"
-  make -C "${1}" clean
-  run_as_root make -C "${1}" install
+  run_as_root ln -sf "${DOTFILES}/${1}" "${HOME}/.local/src/${dirname}"
+  make -C "${DOTFILES}/${1}" clean
+  run_as_root make -C "${DOTFILES}/${1}" install
 }
 
 install_custom_builds() {
