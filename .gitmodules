@@ -14,7 +14,7 @@
 	path = src/xssstate
 	url = https://github.com/lannuttia/xssstate.git
 	branch = master
-[submodule "slock"]
+[submodule "src/slock"]
 	path = src/slock
 	url = https://github.com/lannuttia/slock.git
 	branch = master
