@@ -2,10 +2,9 @@ if [ -x "$(command -v vim)" ]; then
   EDITOR=vim
 elif [ -x "$(command -v vi)" ]; then
   EDITOR=vi
-elif [ -x "$(command -v nano)" ]; then
-  EDITOR=nano
 fi
 export EDITOR
+export TERMINAL=st
 
 GPG_TTY=$(tty)
 export GPG_TTY
