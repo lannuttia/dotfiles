@@ -48,7 +48,7 @@ Xft.hintstyle:           hintslight
 
 !! St specific configuration
 St.font:            FreeMono:pixelsize=12,Noto Color Emoji:pixelsize=12
-St.alpha:           0.85
+St.alpha:           0.95
 
 !! Dwm specific configuration
 dwm.font:           FreeMono:pixelsize=12,Noto Color Emoji:pixelsize=12
