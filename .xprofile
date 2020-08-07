@@ -40,6 +40,13 @@ start_dwmblocks() {
   fi
 }
 
+start_xsautolock() {
+  if command_exists xsidle; then
+    xset s 600
+    pidof xsidle || xsidle slock &
+  fi
+}
+
 case $XDG_SESSION_DESKTOP in
   dwm|bspwm|'')
     start_pulseaudio
@@ -47,6 +54,7 @@ case $XDG_SESSION_DESKTOP in
     start_dwmblocks
     start_compositor
     start_unclutter
+    start_xsautolock
     ${HOME}/.fehbg
     ;;
   default)
