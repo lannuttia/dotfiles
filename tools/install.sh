@@ -387,6 +387,7 @@ install_custom_builds() {
 }
 
 install_themes() {
+  mkdir -p "${HOME}/.local/src"
   ln -sf "${DOTFILES}/Xresources-themes" "${HOME}/.local/src/Xresources-themes"
 }
 
