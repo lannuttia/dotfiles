@@ -370,7 +370,7 @@ link_dotfiles() {
 
 install_custom_build() {
   dirname=$(basename "${1}")
-  run_as_root ln -sf "${DOTFILES}/${1}" "${HOME}/.local/src/${dirname}"
+  ln -sf "${DOTFILES}/${1}" "${HOME}/.local/src/${dirname}"
   make -C "${DOTFILES}/${1}" clean
   run_as_root make -C "${DOTFILES}/${1}" install
 }
@@ -378,12 +378,15 @@ install_custom_build() {
 install_custom_builds() {
   # My builds require glibc so I cannot support alpine linux
   if [ "$gui" = true -a "$os" != alpine -a "$os" != elementary -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
-    mkdir -p "${HOME}/.local/src"
-    git -C "${DOTFILES}" submodule foreach --quiet --recursive '[ -x bootstrap.sh ] && ./bootstrap.sh'
-    for submodule in $(git -C "${DOTFILES}" submodule foreach --quiet --recursive 'echo "$name"'); do
+    for submodule in src/*; do
+      [ -x "${submodule}/bootstrap.sh" ] && . "./${submodule}/bootstrap.sh"
       install_custom_build "${submodule}"
     done
   fi
+}
+
+install_themes() {
+  ln -sf "${DOTFILES}/Xresources-themes" "${HOME}/.local/src/Xresources-themes"
 }
 
 main() {
@@ -417,7 +420,9 @@ main() {
   install
   clone_dotfiles
   link_dotfiles
+  mkdir -p "${HOME}/.local/src"
   install_custom_builds
+  install_themes
   setup_ssh
   setup_gpg
   setup_shell
