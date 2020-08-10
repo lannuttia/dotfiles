@@ -370,7 +370,7 @@ link_dotfiles() {
 
 install_custom_build() {
   dirname=$(basename "${1}")
-  run_as_root ln -sf "${DOTFILES}/${1}" "${HOME}/.local/src/${dirname}"
+  ln -sf "${DOTFILES}/${1}" "${HOME}/.local/src/${dirname}"
   make -C "${DOTFILES}/${1}" clean
   run_as_root make -C "${DOTFILES}/${1}" install
 }
@@ -384,6 +384,10 @@ install_custom_builds() {
       install_custom_build "${submodule}"
     done
   fi
+}
+
+install_themes() {
+  ln -sf "${DOTFILES}/Xresources-themes" "${HOME}/.local/src/Xresources-themes"
 }
 
 main() {
@@ -418,6 +422,7 @@ main() {
   clone_dotfiles
   link_dotfiles
   install_custom_builds
+  install_themes
   setup_ssh
   setup_gpg
   setup_shell
