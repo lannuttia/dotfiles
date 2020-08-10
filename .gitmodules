@@ -22,3 +22,7 @@
 	path = src/dmenu
 	url = https://github.com/lannuttia/dmenu.git
 	branch = master
+[submodule "Xresources-themes"]
+	path = Xresources-themes
+	url = https://github.com/lannuttia/Xresources-themes.git
+	branch = master
