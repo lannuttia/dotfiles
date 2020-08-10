@@ -18,3 +18,7 @@
 	path = src/slock
 	url = https://github.com/lannuttia/slock.git
 	branch = master
+[submodule "src/dmenu"]
+	path = src/dmenu
+	url = https://git.suckless.org/dmenu
+	branch = master
