@@ -1,4 +1,4 @@
-#include "./.local/src/Xresources-themes/base16-irblack.Xresources"
+#include "./.local/src/Xresources-themes/base16-isotope.Xresources"
 
 Xft.dpi:                `128
 Xft.rgba:                rgba
@@ -32,11 +32,11 @@ Xft.hintstyle:           hintslight
 *.color15: base06
 
 !! St specific configuration
-St.font:            FreeMono:pixelsize=12,Noto Color Emoji:pixelsize=12
-St.alpha:           0.95
+St.font:            FreeMono:pixelsize=12
+St.alpha:           0.8
 
 !! Dwm specific configuration
-dwm.font:           FreeMono:pixelsize=12,Noto Color Emoji:pixelsize=12
+dwm.font:           FreeMono:pixelsize=12
 dwm.normfgcolor:    base04
 dwm.normbgcolor:    base00
 dwm.selfgcolor:     base08
