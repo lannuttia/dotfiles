@@ -8,7 +8,7 @@ start_pulseaudio() {
 
 start_compositor() {
   if command_exists picom; then
-    pidof picom || picom -b
+    pidof picom || picom --experimental-backends -b
   elif command_exists compton; then
     pidof compton || compton -b
   elif command_exists xcompmgr; then

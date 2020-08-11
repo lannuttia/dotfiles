@@ -379,7 +379,7 @@ install_custom_builds() {
   # My builds require glibc so I cannot support alpine linux
   if [ "$gui" = true -a "$os" != alpine -a "$os" != elementary -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
     for submodule in src/*; do
-      [ -x "${submodule}/bootstrap.sh" ] && . "./${submodule}/bootstrap.sh"
+      [ -x "${submodule}/bootstrap.sh" ] && "./${submodule}/bootstrap.sh"
       install_custom_build "${submodule}"
     done
   fi
