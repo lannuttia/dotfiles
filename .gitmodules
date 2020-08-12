@@ -26,3 +26,6 @@
 	path = Xresources-themes
 	url = https://github.com/lannuttia/Xresources-themes.git
 	branch = master
+[submodule "src/tabbed"]
+	path = src/tabbed
+	url = https://github.com/lannuttia/tabbed
