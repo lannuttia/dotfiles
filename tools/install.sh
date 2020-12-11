@@ -12,6 +12,7 @@ chsh=${chsh:-true}
 ssh_keygen=${ssh_keygen:-true}
 gpg_keygen=${gpg_keygen:-true}
 git_config=${git_config:-true}
+dependency_management=${dependency_management:-true}
 gui=${gui:-true}
 
 error() {
@@ -169,6 +170,7 @@ usage() {
   echo -e "\t--no-gpg-keygen\t\tSkip interactive GPG key generation"
   echo -e "\t--no-git-config\t\tSkip interactive Git configuration"
   echo -e "\t--no-gui\t\tDo not install the anything related to running a GUI"
+  echo -e "\t--no-dependency-management\t\tDo not attempt to manage dependencies."
   echo -e "\t--no-interactive\t\tSkip all interactive steps"
 }
 
@@ -372,14 +374,15 @@ install_custom_build() {
   dirname=$(basename "${1}")
   ln -sf "${DOTFILES}/${1}" "${HOME}/.local/src/${dirname}"
   make -C "${DOTFILES}/${1}" clean
-  run_as_root make -C "${DOTFILES}/${1}" install
+  make -C "${DOTFILES}/${1}" install
 }
 
 install_custom_builds() {
+  mkdir -p "${HOME}/.local/src"
   # My builds require glibc so I cannot support alpine linux
   if [ "$gui" = true -a "$os" != alpine -a "$os" != elementary -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
     for submodule in src/*; do
-      [ -x "${submodule}/bootstrap.sh" ] && "./${submodule}/bootstrap.sh"
+      [ "${dependency_management}" = true ] && [ -x "${submodule}/bootstrap.sh" ] && "./${submodule}/bootstrap.sh"
       install_custom_build "${submodule}"
     done
   fi
@@ -406,6 +409,7 @@ main() {
       --no-gpg-keygen) gpg_keygen=false ;;
       --no-git-config) git_config=false ;;
       --no-gui) gui=false ;;
+      --no-dependency-management) dependency_management=false ;;
       --no-interactive) chsh=false; ssh_keygen=false; gpg_keygen=false; git_config=false ;;
       *) usage >&2; exit 1 ;;
     esac
@@ -414,13 +418,14 @@ main() {
 
   setup_color
 
-  update
-  add_repositories
-  update
-  install
+  if [ "$dependency_management" = true ]; then
+    update
+    add_repositories
+    update
+    install
+  fi
   clone_dotfiles
   link_dotfiles
-  mkdir -p "${HOME}/.local/src"
   install_custom_builds
   install_themes
   setup_ssh
