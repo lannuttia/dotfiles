@@ -23,3 +23,6 @@ if [ "$(tty)" = /dev/tty1 ]; then
   startx
 fi
 
+if [ -f "${HOME}/.cargo/env" ]; then
+  source "$HOME/.cargo/env"
+fi
