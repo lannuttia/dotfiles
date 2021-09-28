@@ -1,18 +1,1 @@
-#! /bin/sh
-
-killall -q sxhkd polybar
-echo "After killall"
-sxhkd &
-polybar main &
-
-bspc monitor -d I II III IV V VI VII VIII IX X
-
-dropdown_name="dropdown"
-bspc query -N -n .hidden > /dev/null || setsid $TERMINAL -n "$dropdown_name" -e dropdown >/dev/null 2>&1 &
-
-# If refreshing bwpwm, remove all previous rules to prevent doubling up.
-bspc rule -r "*"
-
-bspc rule -a St:$dropdown_name hidden=on
-bspc rule -a St:$dropdown_name sticky=on
-bspc rule -a St:$dropdown_name state=floating
+/home/anthony/.dotfiles/.config/bspwm/bspwmrc
