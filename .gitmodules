@@ -1,4 +1,4 @@
-[submodule "Xresources-themes"]
-	path = Xresources-themes
-	url = https://github.com/lannuttia/Xresources-themes.git
-	branch = master
+[submodule ".local/src/Xresources-themes"]
+	path = .local/src/Xresources-themes
+	url = https://github.com/logico-dev/Xresources-themes.git
+    branch = master

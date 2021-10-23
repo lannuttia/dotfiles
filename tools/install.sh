@@ -240,15 +240,8 @@ link_dotfiles() {
   echo "${dotfiles}" | xargs -I '{}' ln -sf "${DOTFILES}/{}" "${HOME}/{}"
 }
 
-install_custom_build() {
-  dirname=$(basename "${1}")
-  ln -sf "${DOTFILES}/${1}" "${HOME}/.local/src/${dirname}"
-  make -C "${DOTFILES}/${1}" clean
-  make -C "${DOTFILES}/${1}" install
-}
-
 install_themes() {
-  ln -sf "${DOTFILES}/Xresources-themes" "${HOME}/.local/src/Xresources-themes"
+  ln -sf "${DOTFILES}/.local/src/Xresources-themes" "${HOME}/.local/src/Xresources-themes"
 }
 
 main() {
