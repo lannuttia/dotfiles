@@ -1,1 +1,27 @@
-/home/anthony/.dotfiles/.config/bspwm/bspwmrc
+#! /bin/sh
+
+killall -q sxhkd polybar
+sxhkd &
+if type "xrandr"; then
+  for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+    MONITOR=$m polybar --reload main &
+  done
+else
+  polybar --reload main &
+fi
+
+xsetroot -cursor_name left_ptr &
+
+bspc monitor -d terminal browser spotify steam
+bspc config border_width 0
+bspc config window_gap 5
+
+dropdown_name="dropdown"
+bspc query -N -n .hidden > /dev/null || setsid $TERMINAL -n "$dropdown_name" -e dropdown >/dev/null 2>&1 &
+
+# If refreshing bwpwm, remove all previous rules to prevent doubling up.
+bspc rule -r "*"
+
+bspc rule -a St:$dropdown_name hidden=on
+bspc rule -a St:$dropdown_name sticky=on
+bspc rule -a St:$dropdown_name state=floating
