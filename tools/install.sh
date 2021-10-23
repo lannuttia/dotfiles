@@ -242,6 +242,7 @@ link_dotfiles() {
 
 install_themes() {
   ln -sf "${DOTFILES}/.local/src/Xresources-themes" "${HOME}/.local/src/Xresources-themes"
+  ln -sf "${DOTFILES}/.config/alacritty/colorschemes/dracula" "${HOME}/.config/alacritty/colorschemes/dracula"
 }
 
 main() {

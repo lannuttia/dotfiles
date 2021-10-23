@@ -2,3 +2,7 @@
 	path = .local/src/Xresources-themes
 	url = https://github.com/logico-dev/Xresources-themes.git
     branch = master
+[submodule ".config/alacritty/colorschemes/dracula"]
+	path = .config/alacritty/colorschemes/dracula
+	url = https://github.com/dracula/alacritty.git
+	branch = master
