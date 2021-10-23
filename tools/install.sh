@@ -9,6 +9,7 @@ remote=${remote:-https://github.com/${repo}.git}
 branch=${branch:-master}
 
 chsh=${chsh:-true}
+sync=${sync:-true}
 ssh_keygen=${ssh_keygen:-true}
 gpg_keygen=${gpg_keygen:-true}
 git_config=${git_config:-true}
@@ -98,7 +99,11 @@ clone_dotfiles() {
       exit 1
       }
     fi
+  else
+    git -C "$DOTFILES" fetch "$remote"
+    git -C "$DOTFILES" checkout "$branch"
   fi
+
   git -C "$DOTFILES" submodule update --init --recursive
 
   echo
@@ -171,6 +176,7 @@ usage() {
   echo -e "\t--no-devel\t\tDo not install any development tools"
   echo -e "\t--no-dependency-management\t\tDo not attempt to manage dependencies."
   echo -e "\t--no-interactive\t\tSkip all interactive steps"
+  echo -e "\t--no-sync\t\tDo not sync repositories."
 }
 
 update() {
@@ -230,8 +236,8 @@ install() {
 
 link_dotfiles() {
   dotfiles="$(git -C "${DOTFILES}" ls-files -- ':!:tools' ':!:images' ':!:src' ':!:*.md' ':!:.github' ':!:.gitignore' ':!:.gitmodules' ':!:.devcontainer')"
-  echo "${dotfiles}" | xargs -n1 dirname | sort | uniq | xargs -n1 -I '{}' mkdir -p "${HOME}/{}"
-  echo "${dotfiles}" | xargs -n1 -I '{}' ln -sf "${DOTFILES}/{}" "${HOME}/{}"
+  echo "${dotfiles}" | xargs -n1 dirname | sort | uniq | xargs -I '{}' mkdir -p "${HOME}/{}"
+  echo "${dotfiles}" | xargs -I '{}' ln -sf "${DOTFILES}/{}" "${HOME}/{}"
 }
 
 install_custom_build() {
@@ -265,6 +271,7 @@ main() {
       --no-devel) devel=false ;;
       --no-dependency-management) dependency_management=false ;;
       --no-interactive) chsh=false; ssh_keygen=false; gpg_keygen=false; git_config=false ;;
+      --no-sync) sync=false ;;
       *) usage >&2; exit 1 ;;
     esac
     shift
@@ -273,7 +280,9 @@ main() {
   setup_color
 
   if [ "$dependency_management" = true ]; then
-    update
+    if [ "$sync" = true ]; then
+      update
+    fi
     install
   fi
   clone_dotfiles
