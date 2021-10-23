@@ -14,6 +14,7 @@ gpg_keygen=${gpg_keygen:-true}
 git_config=${git_config:-true}
 dependency_management=${dependency_management:-true}
 gui=${gui:-true}
+devel=${devel:-true}
 
 error() {
 	echo ${RED}"Error: $@"${RESET} >&2
@@ -48,6 +49,8 @@ run_as_root() {
     else
       su -c "$*"
     fi
+  elif command_exists doas; then
+    doas sh -c "$*"
   else
     su -c "$*"
   fi
@@ -80,11 +83,6 @@ clone_dotfiles() {
     exit 1
   }
 
-  if [ "$OSTYPE" = cygwin ] && git --version | grep -q msysgit; then
-		error "Windows/MSYS Git is not supported on Cygwin"
-		error "Make sure the Cygwin git package is installed and is first on the \$PATH"
-		exit 1
-	fi
   if [ ! -d $DOTFILES ]; then
     git clone -c core.eol=lf \
       -c fsck.zeroPaddedFilemode=ignore \
@@ -170,20 +168,15 @@ usage() {
   echo -e "\t--no-gpg-keygen\t\tSkip interactive GPG key generation"
   echo -e "\t--no-git-config\t\tSkip interactive Git configuration"
   echo -e "\t--no-gui\t\tDo not install the anything related to running a GUI"
+  echo -e "\t--no-devel\t\tDo not install any development tools"
   echo -e "\t--no-dependency-management\t\tDo not attempt to manage dependencies."
   echo -e "\t--no-interactive\t\tSkip all interactive steps"
 }
 
 update() {
   case $os in
-    debian|ubuntu)
-      run_as_root apt update
-    ;;
-    alpine)
-      run_as_root apk update
-    ;;
-    arch|artix)
-      run_as_root pacman -Sy
+    gentoo)
+      run_as_root emerge --sync
     ;;
     *)
       error "Unsupported Distribution: $os"
@@ -192,142 +185,32 @@ update() {
   esac
 }
 
-add_repositories() {
-  case $ID in
-      kali)
-        echo 'No additional repositorys will be added for Kali'
-        run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
-      ;;
-      ubuntu|elementary)
-        arch=$(dpkg --print-architecture)
-        echo 'Installing minimal packages to add Azure CLI repository'
-        run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
-        echo 'Adding Microsoft signing key'
-        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | run_as_root tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
-        echo 'Adding Microsoft Azure CLI repository'
-        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${UBUNTU_CODENAME:-$VERSION_CODENAME} main" | run_as_root tee /etc/apt/sources.list.d/azure-cli.list
-      ;;
-      debian)
-        arch=$(dpkg --print-architecture)
-        echo 'Installing minimal packages to add Azure CLI repository'
-        run_as_root apt install --no-install-recommends -y ca-certificates curl apt-transport-https gnupg
-        echo 'Adding Microsoft signing key'
-        curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | run_as_root tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
-        echo 'Adding Microsoft Azure CLI repository'
-        echo "deb [arch=${arch}] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" | run_as_root tee /etc/apt/sources.list.d/azure-cli.list
-      ;;
-      alpine)
-        echo 'No additional repositorys will be added for Alpine'
-        run_as_root apk add ca-certificates curl gnupg
-      ;;
-      arch|artix)
-      ;;
-      *)
-          error "Unsupported OS: $NAME"
-          exit 1
-      ;;
-  esac
-}
-
 packages() {
   case $ID in
-    kali)
-      case $VERSION_ID in
-        *)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
-          if [ "$gui" = true ]; then
-            # Install Window Manager and Utilities
-            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
-            # Install tools for viewing PDFs
-            echo -n ' zathura zathura-pdf-poppler'
-            # Install MPD and NCMPCPP
-            echo -n ' mpd ncmpcpp'
-            # Install fonts that are directly referenced in ~.Xprofile
-            echo -n ' fonts-freefont-otf fonts-noto-color-emoji'
-          fi
-        ;;
-      esac
-    ;;
-    ubuntu|elementary)
-      case $VERSION_ID in
-        18.04|5.*)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
-          if [ "$gui" = true ]; then
-            # Install Window Manager and Utilities
-            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
-            # Install tools for viewing PDFs
-            echo -n ' zathura zathura-pdf-poppler'
-            # Install MPD and NCMPCPP
-            echo -n ' mpd ncmpcpp'
-            # Install fonts that are directly referenced in ~.Xprofile
-            echo -n ' fonts-freefont-otf fonts-noto-color-emoji'
-          fi
-        ;;
-        20.04)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
-          if [ "$gui" = true ]; then
-            # Install Window Manager and Utilities
-            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
-            # Install tools for viewing PDFs
-            echo -n ' zathura zathura-pdf-poppler'
-            # Install MPD and NCMPCPP
-            echo -n ' mpd ncmpcpp'
-            # Install fonts that are directly referenced in ~.Xprofile
-            echo -n ' fonts-freefont-otf fonts-noto-color-emoji'
-          fi
-        ;;
-        *)
-          error "Unsupported version of $NAME: $VERSION_ID"
-          exit 1;
-        ;;
-      esac
-    ;;
-    debian)
-      case $VERSION_ID in
-        10)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
-          if [ "$gui" = true ]; then
-            # Install Window Manager and Utilities
-            echo -n ' x11-xserver-utils compton gnome-keyring libsecret-1-0 unclutter feh pulseaudio'
-            # Install tools for viewing PDFs
-            echo -n ' zathura zathura-pdf-poppler'
-            # Install MPD and NCMPCPP
-            echo -n ' mpd ncmpcpp'
-            # Install fonts that are directly referenced in ~.Xprofile
-            echo -n ' fonts-freefont-otf fonts-noto-color-emoji'
-          fi
-        ;;
-        9)
-          echo -n 'git gnupg python3 python3-pip openssh-client dnsutils vim neofetch zsh dvtm azure-cli ranger htop'
-          # GUI support for Debian 9 doesn't exist because my custom builds require a newer version of fontconfig than exists in the debian 9 repos
-        ;;
-        *)
-          error "Unsupported version of $NAME: $VERSION_ID"
-        ;;
-      esac
-    ;;
-    alpine)
-      case $VERSION_ID in
-        3\.*)
-          echo -n 'git gnupg python3 py3-pip openssh-client bind-tools vim neofetch zsh dvtm ranger htop'
-          # GUI support for alpine doesn't exist because my custom st build requires glibc
-	      ;;
-        *)
-          error "Unsupported version of $NAME: $VERSION_ID"
-        ;;
-      esac;
-    ;;
-    arch|artix)
-      echo -n 'git gnupg python python-pip openssh bind-tools vim neofetch zsh dvtm ranger htop'
-      if [ "$gui" = true ]; then
-        # Install Window Manager and Utilities
-        echo -n ' xorg-xrdb picom gnome-keyring libsecret unclutter feh'
-        # Install tools for viewing PDFs
-        echo -n ' zathura zathura-pdf-mupdf'
-        # Install MPD and NCMPCPP
-        echo -n ' mpd ncmpcpp'
-        # Install fonts that are directly referenced in ~.Xprofile
-        echo -n ' gnu-free-fonts noto-fonts-emoji'
+    gentoo)
+      echo -n app-editors/{vim,vscode} ' '
+      echo -n app-emulation/{podman,qemu,virt-manager} ' '
+      echo -n app-misc/{abduco,dvtm,neofetch,physlock,ranger} ' '
+      echo -n app-portage/{cpuid2cpuflags,eix,gentoolkit} ' '
+      echo -n app-shells/zsh ' '
+      echo -n sys-process/{time,lsof,iotop,htop} ' '
+      if [ "${devel}" = true ]; then
+        echo -n sys-devel/gdb ' '
+        echo -n dev-vcs/git ' '
+        echo -n dev-util/{ccache,github-cli,rustup} ' '
+        echo -n dev-python/pip ' '
+        echo -n dev-lang/{go,rust} ' '
+      fi
+      if [ "${gui}" = true ]; then
+        echo -n app-text/{texlive,zathura{,-pdf-mupdf}} ' '
+        echo -n media-fonts/{fontawesome,noto-emoji,unifont} ' '
+        echo -n media-gfx/{feh,maim} ' '
+        echo -n media-sound/{pavucontrol,playerctl,spotify} ' '
+        echo -n media-video/{atomicparsley,mpv,rtmpdump} ' '
+        echo -n x11-apps/{mesa-progs,xfontsel,xinit,xrandr,xsetroot,xwininfo,xsetroot,xwininfo} ' '
+        echo -n x11-misc/{dmenu,dunst,picom,polybar,sxhkd,unclutter,xdotool} ' '
+        echo -n x11-terms/alacritty ' '
+        echo -n x11-wm/bspwm ' '
       fi
     ;;
     *)
@@ -339,29 +222,10 @@ packages() {
 
 install() {
   case $os in
-    debian|ubuntu)
-      run_as_root apt install -y $(packages)
-    ;;
-    arch|artix)
-      run_as_root pacman -S --noconfirm $(packages)
-    ;;
-    alpine)
-      run_as_root apk add $(packages)
-    ;;
-    *)
-      error "Unsupported OS: $NAME"
-      exit 1
+    gentoo)
+      run_as_root emerge -uDN --autounmask-continue $(packages)
     ;;
   esac
-  if [ ! -d $HOME/.oh-my-zsh ]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-  fi
-  if command_exists az; then
-    az extension add --name azure-devops --name codespaces
-  fi
-  if command_exists pip3; then
-    pip3 install yq
-  fi
 }
 
 link_dotfiles() {
@@ -375,17 +239,6 @@ install_custom_build() {
   ln -sf "${DOTFILES}/${1}" "${HOME}/.local/src/${dirname}"
   make -C "${DOTFILES}/${1}" clean
   make -C "${DOTFILES}/${1}" install
-}
-
-install_custom_builds() {
-  mkdir -p "${HOME}/.local/src"
-  # My builds require glibc so I cannot support alpine linux
-  if [ "$gui" = true -a "$os" != alpine -a "$os" != elementary -a \( "$os" != debian -a "$VERSION_ID" != 9 \) ]; then
-    for submodule in src/*; do
-      [ "${dependency_management}" = true ] && [ -x "${submodule}/bootstrap.sh" ] && "./${submodule}/bootstrap.sh"
-      install_custom_build "${submodule}"
-    done
-  fi
 }
 
 install_themes() {
@@ -409,6 +262,7 @@ main() {
       --no-gpg-keygen) gpg_keygen=false ;;
       --no-git-config) git_config=false ;;
       --no-gui) gui=false ;;
+      --no-devel) devel=false ;;
       --no-dependency-management) dependency_management=false ;;
       --no-interactive) chsh=false; ssh_keygen=false; gpg_keygen=false; git_config=false ;;
       *) usage >&2; exit 1 ;;
@@ -420,13 +274,10 @@ main() {
 
   if [ "$dependency_management" = true ]; then
     update
-    add_repositories
-    update
     install
   fi
   clone_dotfiles
   link_dotfiles
-  install_custom_builds
   install_themes
   setup_ssh
   setup_gpg

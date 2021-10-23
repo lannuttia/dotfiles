@@ -1,11 +1,3 @@
-if [ -x "$(command -v vim)" ]; then
-  EDITOR=vim
-elif [ -x "$(command -v vi)" ]; then
-  EDITOR=vi
-fi
-export EDITOR
-export TERMINAL=st
-
 GPG_TTY=$(tty)
 export GPG_TTY
 
@@ -19,10 +11,17 @@ if [ -d "$HOME/.local/bin" ]; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# mutt background fix
+COLORFGBG="default;default"
+
 if [ "$(tty)" = /dev/tty1 ]; then
   startx
 fi
 
-if [ -f "${HOME}/.cargo/env" ]; then
-  source "$HOME/.cargo/env"
+if [ -d "$HOME/.cargo/bin" ]; then
+    PATH="$HOME/.cargo/bin:$PATH"
 fi
+
+if [ -f "${HOME}/.cargo/env" ]; then
+  fi
+. "$HOME/.cargo/env"

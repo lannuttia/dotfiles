@@ -1,4 +1,4 @@
-#include "./.local/src/Xresources-themes/base16-isotope.Xresources"
+#include "./.local/src/Xresources-themes/base16-dracula-256.Xresources"
 
 Xft.dpi:                `128
 Xft.rgba:                rgba
@@ -7,37 +7,10 @@ Xft.hinting:             1
 Xft.autohint:            0
 Xft.hintstyle:           hintslight
 
+*.font: xft:Liberation Mono:style=regular:antialias=true:autohint=true:size=10, \
+        xft:Unifont Upper:style=Medium:antialias=true:autohint=true:size=10, \
+        xft:Font Awesome 5 Free Solid:style=solid:antialias=true:autohint=true:size=10, \
+        xft:Font Awesome 5 Brands Regular:style=Regular:antialias=true:autohint=true:size=10
 
-*.foreground:   base05
-*.background:   base00
-*.cursorColor:  base05
-*fading: 35
-*fadeColor: base3
-
-*.color0: base01
-*.color1: base0B
-*.color2: base0E
-*.color3: base0D
-*.color4: base09
-*.color5: base0F
-*.color6: base08
-*.color7: base05
-*.color8: base03
-*.color9: base0B
-*.color10: base0E
-*.color11: base0D
-*.color12: base09
-*.color13: base0F
-*.color14: base07
-*.color15: base06
-
-!! St specific configuration
-St.font:            FreeMono:pixelsize=12
-St.alpha:           0.8
-
-!! Dwm specific configuration
-dwm.font:           FreeMono:pixelsize=12
-dwm.normfgcolor:    base04
-dwm.normbgcolor:    base00
-dwm.selfgcolor:     base08
-dwm.selbgcolor:     base03
+dmenu.selbackground: base08
+dmenu.font: xft:Liberation Mono:style=regular:antialias=true:autohint=true:size=10

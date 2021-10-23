@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-scale --randomize --recursive "${HOME}/.local/share/backgrounds/"
+feh --no-fehbg --bg-scale "${HOME}/.local/share/backgrounds/purple-mountain.jpg"

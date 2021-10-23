@@ -47,14 +47,15 @@ start_xsautolock() {
   fi
 }
 
+
 case $XDG_SESSION_DESKTOP in
   dwm|bspwm|'')
     start_pulseaudio
     start_mpd
-    start_dwmblocks
+    #start_dwmblocks
     start_compositor
     start_unclutter
-    start_xsautolock
+    #start_xsautolock
     ${HOME}/.fehbg
     ;;
   default)
