@@ -17,7 +17,7 @@ let g:ale_fixers = {
 packloadall
 
 syntax on
-" colorscheme darkslategray
+colorscheme dracula
 
 " Load all of the helptags now, after plugins have been loaded.
 " All messages and errors will be ignored.

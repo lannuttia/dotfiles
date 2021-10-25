@@ -14,3 +14,7 @@
 	path = .vim/pack/git-plugins/start/editorconfig-vim
 	url = https://github.com/editorconfig/editorconfig-vim.git
 	branch = master
+[submodule ".vim/pack/git-plugins/start/dracula-vim"]
+	path = .vim/pack/git-plugins/start/dracula-vim
+	url = https://github.com/dracula/vim.git
+	branch = master
