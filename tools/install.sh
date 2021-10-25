@@ -196,7 +196,7 @@ packages() {
     gentoo)
       echo -n app-editors/{vim,vscode} ' '
       echo -n app-emulation/{podman,qemu,virt-manager} ' '
-      echo -n app-misc/{abduco,dvtm,neofetch,physlock,ranger} ' '
+      echo -n app-misc/{abduco,dvtm,neofetch,ranger} ' '
       echo -n app-portage/{cpuid2cpuflags,eix,gentoolkit} ' '
       echo -n app-shells/zsh ' '
       echo -n sys-process/{time,lsof,iotop,htop} ' '
@@ -204,7 +204,7 @@ packages() {
         echo -n sys-devel/gdb ' '
         echo -n dev-vcs/git ' '
         echo -n dev-util/{ccache,github-cli,rustup} ' '
-        echo -n dev-python/pip ' '
+        echo -n dev-python/{pip,flake8,isort} ' '
         echo -n dev-lang/{go,rust} ' '
       fi
       if [ "${gui}" = true ]; then
@@ -235,9 +235,10 @@ install() {
 }
 
 link_dotfiles() {
-  dotfiles="$(git -C "${DOTFILES}" ls-files -- ':!:tools' ':!:images' ':!:src' ':!:*.md' ':!:.github' ':!:.gitignore' ':!:.gitmodules' ':!:.devcontainer')"
+  dotfiles="$(git -C "${DOTFILES}" ls-files -- ':!:tools' ':!:images' ':!:src' ':!:*.md' ':!:.github' ':!:.gitignore' ':!:.gitmodules' ':!:.devcontainer' ':!:.vim')"
   echo "${dotfiles}" | xargs -n1 dirname | sort | uniq | xargs -I '{}' mkdir -p "${HOME}/{}"
   echo "${dotfiles}" | xargs -I '{}' ln -sf "${DOTFILES}/{}" "${HOME}/{}"
+  ln -sf "${DOTFILES}/.vim" "${HOME}/.vim"
 }
 
 install_themes() {

@@ -6,3 +6,11 @@
 	path = .config/alacritty/colorschemes/dracula
 	url = https://github.com/dracula/alacritty.git
 	branch = master
+[submodule ".vim/pack/git-plugins/start/ale"]
+	path = .vim/pack/git-plugins/start/ale
+	url = https://github.com/dense-analysis/ale.git
+	branch = master
+[submodule ".vim/pack/git-plugins/start/editorconfig-vim"]
+	path = .vim/pack/git-plugins/start/editorconfig-vim
+	url = https://github.com/editorconfig/editorconfig-vim.git
+	branch = master
