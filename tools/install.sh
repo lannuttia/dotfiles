@@ -204,7 +204,7 @@ packages() {
         echo -n sys-devel/gdb ' '
         echo -n dev-vcs/git ' '
         echo -n dev-util/{ccache,github-cli,rustup} ' '
-        echo -n dev-python/{pip,flake8,isort} ' '
+        echo -n dev-python/{pip,flake8,isort,python-lsp-server} ' '
         echo -n dev-lang/{go,rust} ' '
       fi
       if [ "${gui}" = true ]; then

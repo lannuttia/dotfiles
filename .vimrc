@@ -11,6 +11,12 @@ let g:ale_fixers = {
 \    'autopep8',
 \  ],
 \}
+let g:ale_linters = {
+\  'python': [
+\    'pylsp',
+\  ],
+\}
+
 
 " Load all plugins now.
 " Plugins need to be added to runtimepath before helptags can be generated.
