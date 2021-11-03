@@ -10,12 +10,17 @@ let g:ale_fixers = {
 \  'python': [
 \    'autopep8',
 \  ],
+\  'vim': [
+\    'vint',
+\  ],
 \}
 let g:ale_linters = {
 \  'python': [
 \    'pylsp',
 \  ],
 \}
+let g:ale_completion_enabled=1
+let g:ale_hover_to_floating_preview=1
 
 
 " Load all plugins now.

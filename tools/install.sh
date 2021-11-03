@@ -203,7 +203,7 @@ packages() {
       if [ "${devel}" = true ]; then
         echo -n sys-devel/gdb ' '
         echo -n dev-vcs/git ' '
-        echo -n dev-util/{ccache,github-cli,rustup} ' '
+        echo -n dev-util/{ccache,github-cli,rustup,vint} ' '
         echo -n dev-python/{pip,flake8,isort,python-lsp-server} ' '
         echo -n dev-lang/{go,rust} ' '
       fi
