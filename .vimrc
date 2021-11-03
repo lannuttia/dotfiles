@@ -13,10 +13,23 @@ let g:ale_fixers = {
 \  'vim': [
 \    'vint',
 \  ],
+\  'rust': [
+\    'rustc',
+\    'rls',
+\  ],
+\  'c': [
+\    'gcc',
+\  ],
 \}
 let g:ale_linters = {
 \  'python': [
 \    'pylsp',
+\  ],
+\  'rust': [
+\    'rls',
+\  ],
+\  'c': [
+\    'ccls',
 \  ],
 \}
 let g:ale_completion_enabled=1
