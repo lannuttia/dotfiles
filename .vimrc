@@ -37,7 +37,6 @@ let g:ale_hover_to_floating_preview=1
 
 let g:airline#extensions#tabline#enabled=1
 
-
 " Load all plugins now.
 " Plugins need to be added to runtimepath before helptags can be generated.
 packloadall

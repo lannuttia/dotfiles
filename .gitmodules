@@ -22,3 +22,7 @@
 	path = .vim/pack/git-plugins/start/vim-airline
 	url = https://github.com/vim-airline/vim-airline.git
 	branch = master
+[submodule ".vim/pack/git-plugins/start/nerdtree"]
+	path = .vim/pack/git-plugins/start/nerdtree
+	url = https://github.com/preservim/nerdtree.git
+	branch = master
