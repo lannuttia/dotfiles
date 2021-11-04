@@ -18,3 +18,7 @@
 	path = .vim/pack/git-plugins/start/dracula-vim
 	url = https://github.com/dracula/vim.git
 	branch = master
+[submodule ".vim/pack/git-plugins/start/vim-airline"]
+	path = .vim/pack/git-plugins/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git
+	branch = master
