@@ -26,3 +26,7 @@
 	path = .vim/pack/git-plugins/start/nerdtree
 	url = https://github.com/preservim/nerdtree.git
 	branch = master
+[submodule ".local/src/eclipse.jdt.ls"]
+	path = .local/src/eclipse.jdt.ls
+	url = https://github.com/eclipse/eclipse.jdt.ls.git
+	branch = master

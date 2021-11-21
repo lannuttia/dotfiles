@@ -22,6 +22,9 @@ let g:ale_fixers = {
 \  ],
 \}
 let g:ale_linters = {
+\  'java': [
+\    'eclipselsp',
+\  ],
 \  'python': [
 \    'pylsp',
 \  ],
@@ -32,6 +35,7 @@ let g:ale_linters = {
 \    'ccls',
 \  ],
 \}
+let g:ale_java_eclipselsp_path='$HOME/.local/src/eclipse.jdt.ls'
 let g:ale_completion_enabled=1
 let g:ale_hover_to_floating_preview=1
 
