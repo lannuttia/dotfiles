@@ -35,9 +35,15 @@ let g:ale_linters = {
 \    'ccls',
 \  ],
 \}
+" Hard coding the java executable path because eclipselsp will fail to launch
+" if your user profile is pointed to a java version other than 11.
+let g:ale_java_eclipselsp_executable='/opt/jdk-11/bin/java'
 let g:ale_java_eclipselsp_path='$HOME/.local/src/eclipse.jdt.ls'
 let g:ale_completion_enabled=1
+let g:ale_completion_autoimport=1
 let g:ale_hover_to_floating_preview=1
+let g:deoplete#enable_at_startup = 1
+set omnifunc=ale#completion#OmniFunc
 
 let g:airline#extensions#tabline#enabled=1
 

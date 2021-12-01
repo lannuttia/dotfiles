@@ -30,3 +30,15 @@
 	path = .local/src/eclipse.jdt.ls
 	url = https://github.com/eclipse/eclipse.jdt.ls.git
 	branch = master
+[submodule ".vim/pack/git-plugins/start/deoplete.nvim"]
+	path = .vim/pack/git-plugins/start/deoplete.nvim
+	url = https://github.com/Shougo/deoplete.nvim.git
+	branch = master
+[submodule ".vim/pack/git-plugins/start/nvim-yarp"]
+	path = .vim/pack/git-plugins/start/nvim-yarp
+	url = https://github.com/roxma/nvim-yarp
+	branch = master
+[submodule ".vim/pack/git-plugins/start/vim-hug-neovim-rpc"]
+	path = .vim/pack/git-plugins/start/vim-hug-neovim-rpc
+	url = https://github.com/roxma/vim-hug-neovim-rpc
+	branch = master
