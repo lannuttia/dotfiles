@@ -18,7 +18,7 @@ gui=${gui:-true}
 devel=${devel:-true}
 
 error() {
-	echo ${RED}"Error: $@"${RESET} >&2
+    echo ${RED}"Error: $@"${RESET} >&2
 }
 
 if [ -f /etc/os-release ] || [ -f /usr/lib/os-release ] || [ -f /etc/openwrt_release ] || [ -f /etc/lsb_release ]; then
@@ -37,7 +37,7 @@ else
 fi
 
 command_exists() {
-	command -v "$@" >/dev/null 2>&1
+    command -v "$@" >/dev/null 2>&1
 }
 
 run_as_root() {
@@ -58,22 +58,22 @@ run_as_root() {
 }
 
 setup_color() {
-	# Only use colors if connected to a terminal
+    # Only use colors if connected to a terminal
     if [ -t 1 ]; then
-		RED=$(printf '\033[31m')
-		GREEN=$(printf '\033[32m')
-		YELLOW=$(printf '\033[33m')
-		BLUE=$(printf '\033[34m')
-		BOLD=$(printf '\033[1m')
-		RESET=$(printf '\033[m')
-	else
-		RED=""
-		GREEN=""
-		YELLOW=""
-		BLUE=""
-		BOLD=""
-		RESET=""
-	fi
+        RED=$(printf '\033[31m')
+        GREEN=$(printf '\033[32m')
+        YELLOW=$(printf '\033[33m')
+        BLUE=$(printf '\033[34m')
+        BOLD=$(printf '\033[1m')
+        RESET=$(printf '\033[m')
+    else
+        RED=""
+        GREEN=""
+        YELLOW=""
+        BLUE=""
+        BOLD=""
+        RESET=""
+    fi
 }
 
 clone_dotfiles() {
@@ -116,8 +116,8 @@ setup_shell() {
 
   if ! command_exists chsh; then
     cat <<-EOF
-			I can't change your shell automatically because this system does not have chsh.
-			${BLUE}If you want a different shell, you will have to manually change it.${RESET}
+            I can't change your shell automatically because this system does not have chsh.
+            ${BLUE}If you want a different shell, you will have to manually change it.${RESET}
 		EOF
   fi
 
@@ -134,11 +134,11 @@ setup_gitconfig() {
     echo -n 'What is the email address you want to use for git: '
     read git_user_email
     git config --global user.email "$git_user_email"
-    
+
     echo -n 'What is the name you want to use for git: '
     read git_user_name
     git config --global user.name "$git_user_name"
-  
+
     git config --global core.autocrlf input
   fi
 }
@@ -205,6 +205,7 @@ packages() {
         echo -n dev-vcs/git ' '
         echo -n dev-util/{ccache,github-cli,rustup,vint,ccls} ' '
         echo -n dev-python/{pip,flake8,isort,python-lsp-server} ' '
+        echo -n dev-java/{openjdk:{8,11,17},{gradle,maven}-bin}
         echo -n dev-lang/{go,rust} ' '
       fi
       if [ "${gui}" = true ]; then
@@ -291,14 +292,14 @@ main() {
 
   printf "$GREEN"
 	cat <<-'EOF'
-    ___        _   _                         _                             _   _   _ _      ______      _    __ _ _           
-   / _ \      | | | |                       | |                           | | | | (_| )     |  _  \    | |  / _(_) |          
-  / /_\ \_ __ | |_| |__   ___  _ __  _   _  | |     __ _ _ __  _ __  _   _| |_| |_ _|/ ___  | | | |___ | |_| |_ _| | ___  ___ 
+    ___        _   _                         _                             _   _   _ _      ______      _    __ _ _
+   / _ \      | | | |                       | |                           | | | | (_| )     |  _  \    | |  / _(_) |
+  / /_\ \_ __ | |_| |__   ___  _ __  _   _  | |     __ _ _ __  _ __  _   _| |_| |_ _|/ ___  | | | |___ | |_| |_ _| | ___  ___
   |  _  | '_ \| __| '_ \ / _ \| '_ \| | | | | |    / _` | '_ \| '_ \| | | | __| __| | / __| | | | / _ \| __|  _| | |/ _ \/ __|
   | | | | | | | |_| | | | (_) | | | | |_| | | |___| (_| | | | | | | | |_| | |_| |_| | \__ \ | |/ / (_) | |_| | | | |  __/\__ \
   \_| |_/_| |_|\__|_| |_|\___/|_| |_|\__, | \_____/\__,_|_| |_|_| |_|\__,_|\__|\__|_| |___/ |___/ \___/ \__|_| |_|_|\___||___/
-                                      __/ |                                                                                   
-                                     |___/                 ....are now installed!                                              
+                                      __/ |
+                                     |___/                 ....are now installed!
 	EOF
 	printf "$RESET"
 }
