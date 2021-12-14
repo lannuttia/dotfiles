@@ -109,6 +109,13 @@ clone_dotfiles() {
   echo
 }
 
+clone_password_store() {
+  password_store_dir="${HOME}/.password-store"
+  if [ ! -d $password_store_dir ]; then
+    gh repo clone lannuttia/Password-Store "${password_store_dir}"
+  fi
+}
+
 setup_shell() {
   if [ "$chsh" = false ]; then
     return
@@ -184,6 +191,10 @@ update() {
     gentoo)
       run_as_root emerge --sync
     ;;
+    fedora)
+      run_as_root dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+      run_as_root dnf distro-sync
+    ;;
     *)
       error "Unsupported Distribution: $os"
       exit 1
@@ -220,6 +231,9 @@ packages() {
         echo -n x11-wm/bspwm ' '
       fi
     ;;
+    fedora)
+      echo -n vim podman abduco dvtm zsh pass{,-otp} gh
+    ;;
     *)
       error "Unsupported OS: $NAME"
       exit 1
@@ -231,6 +245,13 @@ install() {
   case $os in
     gentoo)
       run_as_root emerge -uDN --autounmask-continue $(packages)
+    ;;
+    fedora)
+      run_as_root dnf install -y $(packages)
+    ;;
+    *)
+      error "Unsupported OS: $NAME"
+      exit 1
     ;;
   esac
 }
@@ -281,7 +302,9 @@ main() {
     fi
     install
   fi
+  gh auth login
   clone_dotfiles
+  clone_password_store
   link_dotfiles
   install_themes
   setup_ssh
